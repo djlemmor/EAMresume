@@ -1,5 +1,9 @@
 <template>
-  <div>Create</div>
+  <section class="eam-create">
+    <div class="container">
+      CREATE
+    </div>
+  </section>
 </template>
 
 <script lang="ts">

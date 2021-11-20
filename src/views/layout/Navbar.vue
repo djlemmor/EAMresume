@@ -8,10 +8,9 @@
       </div>
       <nav>
         <router-link :to="{ name: 'Home' }">Home</router-link>
-        <router-link :to="{ name: 'About' }">About</router-link>
         <router-link :to="{ name: 'Contact' }">Contact</router-link>
         <router-link :to="{ name: 'Login' }">Login</router-link>
-        <router-link :to="{ name: 'Create' }">
+        <router-link :to="{ name: 'Format' }">
           <div class="eam-create">
             CREATE
           </div>
@@ -35,13 +34,6 @@ header {
   background-color: var(--eam-gray);
   padding: 1em;
 }
-header  .container {
-  display: flex;
-  justify-content: space-between;
-}
-.container > * {
-  flex-basis: 100%; 
-}
 .eam-logo {
   font-size: 2rem;
   font-weight: bold;
@@ -58,6 +50,10 @@ nav {
 
 nav a {
   padding: 0 1em;
+}
+
+nav a:last-child{
+  padding: 0;
 }
 .eam-create {
   color: var(--eam-ivory);

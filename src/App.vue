@@ -62,5 +62,12 @@ section {
 .container {
     max-width: 1080px;
     margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1em;
+}
+
+.container > * {
+  flex-basis: 100%; 
 }
 </style>
