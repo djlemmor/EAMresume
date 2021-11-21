@@ -1,7 +1,7 @@
 <template>
   <section class="eam-home">
     <div class="container">
-      <div class="eam-home-left">
+      <div class="eam-home-left eam-flex-col">
         <h2>Easy To Use and Free.</h2>
         <h1>Creating A Resume Just Got Easy.</h1>
           <div class="eam-create">

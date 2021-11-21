@@ -19,6 +19,7 @@ export default defineComponent({
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 *,
 *::before,
 *::after {
@@ -69,5 +70,24 @@ section {
 
 .container > * {
   flex-basis: 100%; 
+}
+
+.eam-flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eam-notify {
+  color: var(--eam-blue-gray);
+  margin-bottom: 1em;
+}
+
+input, textarea {
+  display: block;
+  width: 100%;
+  padding: 1em;
+  margin-bottom: 1.2em;
+  border: 1px solid #000;
 }
 </style>

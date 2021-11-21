@@ -1,9 +1,9 @@
 <template>
   <section class="eam-contact">
     <div class="container">
-      <div class="eam-contact-left">
+      <div class="eam-contact-left eam-flex-col">
         <h2>Contact</h2>
-        <p>*Any questions and suggestions? Please contact us</p>
+        <p class="eam-notify">*Any questions and suggestions? Please contact us</p>
         <form @submit.prevent="">
           <label>Name</label>
             <input v-model="name" type="text" required>
@@ -47,17 +47,9 @@ export default defineComponent({
   .eam-contact {
     padding: 1em 0;
   }
-
+  
   .eam-contact-left {
-    align-self: center;
     padding-right: 1em;
-  }
-
-  .eam-contact-left input, textarea {
-    display: block;
-    width: 100%;
-    padding: 1em;
-    margin-bottom: 1em;
   }
 
   .eam-contact-left textarea {
@@ -71,11 +63,6 @@ export default defineComponent({
 
   .eam-contact-left h2 {
     font-size: 2rem;
-  }
-
-  .eam-contact-left p {
-    margin-bottom: 1em;
-    color: var(--eam-cool-gray);
   }
       
   .eam-contact-left button {
