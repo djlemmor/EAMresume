@@ -1,5 +1,5 @@
 <template>
-  <section class="eam-resume">
+  <section class="eam-resume-container">
     <div class="container">
       <div class="eam-resume-left eam-flex-col">
         <h2>Basic Information</h2>
@@ -9,7 +9,7 @@
           <label>Address</label>
             <input v-model="address" type="text" required>
           <label>Mobile Number</label>
-            <input v-model="mobileNumber" type="text" required>
+            <input v-model="mobile" type="text" required>
           <label>Email</label>
             <input v-model="email" type="email" required>
           <label>Upload your picture</label>
@@ -19,7 +19,12 @@
         </form>
       </div>
       <div class="eam-resume-right">
-        <Resume />
+        <Resume 
+          :name="name"
+          :address="address" 
+          :mobile="mobile" 
+          :email="email"  
+        />
       </div>
     </div>
   </section>
@@ -35,7 +40,7 @@ export default defineComponent({
   setup(){
     const name = ref('');
     const address = ref('');
-    const mobileNumber = ref('');
+    const mobile = ref('');
     const email = ref('');
     const fileError = ref(null)
 
@@ -43,7 +48,7 @@ export default defineComponent({
       console.log("test");
     }
 
-    return { name, email, address, mobileNumber, fileError, eamUpload }
+    return { name, email, address, mobile, fileError, eamUpload }
   }
 });
 </script>
@@ -52,7 +57,7 @@ export default defineComponent({
   input[type="file"] {
     cursor: pointer;
   }
-  .eam-resume {
+  .eam-resume-container {
     padding: 2em 0;
   }
   
