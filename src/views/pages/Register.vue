@@ -11,8 +11,8 @@
           <circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/>
         </svg>
         <form @submit.prevent="eamRegister">
-          <label>Display Name</label>
-            <input v-model="name" type="text" required>
+          <!-- <label>Display Name</label>
+            <input v-model="name" type="text" required> -->
           <label>Email</label>
             <input v-model="email" type="email" required>
           <label>Password</label>
@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import fireSignup from '@/helpers/fireSignup'
 
 export default defineComponent({
   name: 'Register',
@@ -34,9 +35,11 @@ export default defineComponent({
     const name = ref('');
     const email = ref('');
     const password = ref('');
+    const { error, signup } = fireSignup()
 
-    const eamRegister = () => { 
-      console.log(name.value, email.value, password.value);
+    const eamRegister = async () => { 
+      console.log(email.value, password.value)
+      await signup(email.value, password.value)
     }
 
     return { name, email, password, eamRegister }

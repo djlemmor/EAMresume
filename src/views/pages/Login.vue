@@ -10,7 +10,7 @@
           <path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/>
           <circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/>
         </svg>
-        <form @submit.prevent="">
+        <form @submit.prevent="eamLogin">
           <label>Email</label>
             <input v-model="email" type="email" required>
           <label>Password</label>
@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import fireSignin from '@/helpers/fireSignin'
 
 export default defineComponent({
   name: 'Login',
@@ -35,7 +36,11 @@ export default defineComponent({
     const email = ref('');
     const password = ref('');
 
-    return { email, password }
+    const eamLogin = () => {
+      fireSignin(email.value, password.value)
+    }
+
+    return { email, password, eamLogin }
   }
 });
 </script>
