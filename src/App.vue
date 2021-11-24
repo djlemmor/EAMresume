@@ -90,4 +90,10 @@ input, textarea {
   margin-bottom: 1.2em;
   border: 1px solid #000;
 }
+
+.error {
+  color: crimson;
+  text-align: center;
+  margin-top: 1em;
+}
 </style>

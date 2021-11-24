@@ -6,6 +6,7 @@ import Register from '@/views/pages/Register.vue'
 import Format from '@/views/pages/Format.vue'
 import NotFound from '@/views/pages/NotFound.vue'
 import Basic from '@/views/resume/Basic.vue'
+import Dashboard from '@/views/pages/Dashboard.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -37,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/basic',
     name: 'Basic',
     component: Basic
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
   },
   {
     path: '/:catchAll(.*)',

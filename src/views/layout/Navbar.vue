@@ -9,7 +9,8 @@
       <nav>
         <router-link :to="{ name: 'Home' }">Home</router-link>
         <router-link :to="{ name: 'Contact' }">Contact</router-link>
-        <router-link :to="{ name: 'Login' }">Login</router-link>
+        <router-link :to="{ name: 'Login' }" v-if="!user">Login</router-link>
+        <router-link :to="{ name: 'Dashboard' }" v-else>Dashboard</router-link>
         <router-link :to="{ name: 'Format' }">
           <div class="eam-create">
             CREATE
@@ -21,11 +22,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
+import fireUser from '@/helpers/fireUser'
 
 export default defineComponent({
   name: 'Navbar',
   components: {},
+  setup() {
+    const { user } = fireUser()
+
+    return { user }
+  }
 });
 </script>
 

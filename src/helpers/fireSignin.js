@@ -1,11 +1,30 @@
+import { ref } from '@vue/reactivity'
+import { firebaseAuth } from '@/firebase/config'
 import { signInWithEmailAndPassword } from "firebase/auth"
-import { firebaseAuth } from "@/firebase/config"
+import fireUser from '@/helpers/fireUser'
 
-const fireSignin = async(email, password) => {
-    const credentials = await signInWithEmailAndPassword(firebaseAuth, email, password);
-    if (credentials.user) {
-        console.log(credentials.user)
-    }
+const error = ref(null)
+const { user } = fireUser()
+const signin = async(email, password) => {
+    error.value = null
+    await signInWithEmailAndPassword(firebaseAuth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            user.value = userCredential.user;
+        })
+        .catch((err) => {
+            if (err.code == 'auth/wrong-password') {
+                error.value = 'Wrong password'
+            } else if (err.code == 'auth/user-not-found') {
+                error.value = 'Wrong email or password'
+            } else {
+                error.value = err.code
+            }
+        });
+}
+
+const fireSignin = () => {
+    return { error, signin }
 }
 
 export default fireSignin

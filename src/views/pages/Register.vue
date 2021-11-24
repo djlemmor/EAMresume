@@ -11,8 +11,8 @@
           <circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/>
         </svg>
         <form @submit.prevent="eamRegister">
-          <!-- <label>Display Name</label>
-            <input v-model="name" type="text" required> -->
+          <label>Display Name</label>
+            <input v-model="displayName" type="text" required>
           <label>Email</label>
             <input v-model="email" type="email" required>
           <label>Password</label>
@@ -20,6 +20,7 @@
           <button>Register</button>
         </form>
       </div>
+      <div class="error">{{ error }}</div>
     </div>
   </section>
 </template>
@@ -27,22 +28,27 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import fireSignup from '@/helpers/fireSignup'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Register',
   components: {},
   setup(){
-    const name = ref('');
-    const email = ref('');
-    const password = ref('');
+    const displayName = ref('')
+    const email = ref('')
+    const password = ref('')
     const { error, signup } = fireSignup()
+    const router = useRouter()
 
+    error.value = null
     const eamRegister = async () => { 
-      console.log(email.value, password.value)
-      await signup(email.value, password.value)
+      await signup(email.value, password.value, displayName.value)
+      if(!error.value) {
+        router.push({ name: 'Dashboard' })
+      }
     }
 
-    return { name, email, password, eamRegister }
+    return { displayName, email, password, eamRegister, error }
   }
 });
 </script>
@@ -50,6 +56,9 @@ export default defineComponent({
 <style scoped>
   .eam-register {
     padding: 6em 0;
+  }
+  .eam-register .container {
+    flex-direction: column;
   }
   .eam-register-container {
     margin: 0 10em;

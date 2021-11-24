@@ -1,20 +1,26 @@
 import { ref } from '@vue/reactivity'
 import { firebaseAuth } from '@/firebase/config'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import fireUser from '@/helpers/fireUser'
 
 const error = ref(null)
-const signup = async(email, password) => {
+const { user } = fireUser()
+const signup = async(email, password, displayName) => {
     error.value = null
     await createUserWithEmailAndPassword(firebaseAuth, email, password)
-        .then((userCredential) => {
+        .then(async(userCredential) => {
             // Signed in 
-            const user = userCredential.user;
-            console.log(user)
-            return user
+            await updateProfile(firebaseAuth.currentUser, { displayName: displayName })
+            user.value = userCredential.user;
         })
         .catch((err) => {
-            error.value = err.message;
-            console.log(error.value)
+            if (err.code == 'auth/email-already-in-use') {
+                error.value = 'The email is already in use'
+            } else if (err.code == 'auth/weak-password') {
+                error.value = 'Password should be at least 6 characters'
+            } else {
+                error.value = err.code
+            }
         });
 }
 

@@ -21,6 +21,7 @@
           </div>
         </form>
       </div>
+      <div class="error">{{ error }}</div>
     </div>
   </section>
 </template>
@@ -28,6 +29,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import fireSignin from '@/helpers/fireSignin'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Login',
@@ -35,12 +37,18 @@ export default defineComponent({
   setup(){
     const email = ref('');
     const password = ref('');
+    const { error, signin } = fireSignin()
+    const router = useRouter()
 
-    const eamLogin = () => {
-      fireSignin(email.value, password.value)
+    error.value = null
+    const eamLogin = async () => {
+      await signin(email.value, password.value)
+      if(!error.value) {
+        router.push({ name: 'Dashboard' })
+      }
     }
 
-    return { email, password, eamLogin }
+    return { email, password, error, eamLogin }
   }
 });
 </script>
@@ -48,6 +56,9 @@ export default defineComponent({
 <style scoped>
   .eam-login {
     padding: 6em 0;
+  }
+  .eam-login .container {
+    flex-direction: column;
   }
   .eam-login-container {
     margin: 0 10em;
