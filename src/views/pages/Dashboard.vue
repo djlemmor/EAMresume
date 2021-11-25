@@ -2,10 +2,12 @@
   <section class="eam-dashboard">
     <div class="container">
       <h1>Dashboard</h1>
-      <p>Display Name: {{ user?.displayName }}</p>
-      <p class="email">Email: {{ user?.email }} </p>
+      <p>Display Name: {{ documentData?.name }}</p>
+      <p class="email">Email: {{ documentData?.email }} </p>
+      <p class="email">Mobile: {{ documentData?.mobile }} </p>
+      <p class="email">Address: {{ documentData?.address }} </p>
       <div>
-        <button @click="eamSignout" class="logout">Logout</button>
+        <button @click="eamSignout" class="logout">LOGOUT</button>
       </div>
       <div class="error">{{ error }}</div>
     </div>
@@ -13,19 +15,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import fireUser from '@/helpers/fireUser'
+import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import fireSignout from '@/helpers/fireSignout'
-import { useRouter } from 'vue-router';
+import fireGetCollection from '@/helpers/fireGetCollection'
 
 export default defineComponent({
   name: 'Dashboard',
   components: {},
   setup() {
-    const { user } = fireUser()
-    const { error, signout } = fireSignout()
     const router = useRouter()
-
+    const { error, signout } = fireSignout()
+    const { documentData, getCollection } = fireGetCollection()
+    getCollection()
+  
     error.value = null
     const eamSignout = async () => {
       await signout()
@@ -34,7 +37,7 @@ export default defineComponent({
       }
     }
 
-    return { user, error, eamSignout }
+    return { error, documentData, eamSignout }
   }
 });
 </script>

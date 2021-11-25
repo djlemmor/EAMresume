@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "allowJs": true ,
+    "allowJs": true,
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -35,6 +35,7 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/firebase"
   ]
 }

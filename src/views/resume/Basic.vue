@@ -3,7 +3,7 @@
     <div class="container">
       <div class="eam-resume-left eam-flex-col">
         <h2>Basic Information</h2>
-        <form @submit.prevent="">
+        <form @submit.prevent="eamSubmit">
           <label>Name</label>
             <input v-model="name" type="text" required>
           <label>Address</label>
@@ -31,24 +31,56 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import Resume from '@/components/Resume.vue';
+import { defineComponent, ref } from 'vue'
+import Resume from '@/components/Resume.vue'
+import fireUpload from '@/helpers/fireUpload'
+import fireUser from '@/helpers/fireUser'
+import fireAddCollection from '@/helpers/fireAddCollection'
+
 
 export default defineComponent({
   name: 'Basic',
   components: { Resume },
   setup(){
-    const name = ref('');
-    const address = ref('');
-    const mobile = ref('');
-    const email = ref('');
-    const fileError = ref(null)
+    const name = ref('')
+    const address = ref('')
+    const mobile = ref('')
+    const email = ref('')
+    const file = ref(null)
+    const fileError = ref('')
+    const { uploadImage } = fireUpload()
+    const { error, addDocument } = fireAddCollection()
+    const { user } = fireUser()
+    console.log(user.value)
 
-    const eamUpload = () => {
-      console.log("test");
+    const types = ['image/png', 'image/jpg', 'image/jpeg']
+
+    const eamUpload = (e: any) => {
+      const selected: any = e.target.files[0]
+      if(selected && types.includes(selected.type)) {
+        file.value = selected
+        fileError.value = ''
+      } else {
+        file.value = null
+        fileError.value = 'Please select an image file(png, jpg, jpeg)'
+      }
+      uploadImage(file.value)
     }
 
-    return { name, email, address, mobile, fileError, eamUpload }
+    const eamSubmit = async () => {
+      const resumeData = {
+        name: name.value,
+        address: address.value,
+        mobile: mobile.value,
+        email: email.value
+      }
+      await addDocument(resumeData)
+      if(!error.value) {
+        console.log("data submitted")
+      }
+    }
+
+    return { name, email, address, mobile, eamUpload, fileError, eamSubmit }
   }
 });
 </script>

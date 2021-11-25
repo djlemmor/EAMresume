@@ -4,7 +4,10 @@
       <p class="eam-resume-name" v-if="name"><b> {{ name }} </b></p>
       <p class="eam-resume-name" v-else><b> Name </b></p>
       <p class="eam-resume-address">Address: {{ address }}</p>
-      <p class="eam-resume-profile-tempo">Profile Here</p>
+      <div class="eam-resume-profile-tempo" v-if="!urlCon.url">Profile Here</div>
+      <div class="eam-resume-profile-picture" v-else>
+        <img :src="urlCon.url" alt="profile picture" >
+      </div>
       <p class="eam-resume-mobile">Mobile Number: {{ mobile }}</p>
       <p class="eam-resume-email">Email: {{ email }}</p>
     </div>
@@ -13,6 +16,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import fireUpload from '@/helpers/fireUpload'
 
 export default defineComponent({
   name: 'Resume',
@@ -22,6 +26,11 @@ export default defineComponent({
     address: String,
     mobile: String,
     email: String
+  },
+  setup() {
+    const { urlCon } = fireUpload()
+
+    return { urlCon }
   }
 });
 </script>
@@ -50,6 +59,13 @@ export default defineComponent({
   position: absolute;
   top: 1em;
   right: 1em;
+}
+
+.eam-resume-profile-picture {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  width: 8em;
 }
 
 .eam-resume-address {
