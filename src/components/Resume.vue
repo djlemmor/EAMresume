@@ -2,21 +2,28 @@
   <div class="eam-resume">
     <div class="eam-resume-basic">
       <p class="eam-resume-name" v-if="name"><b> {{ name }} </b></p>
-      <p class="eam-resume-name" v-else><b> Name </b></p>
-      <p class="eam-resume-address">Address: {{ address }}</p>
-      <div class="eam-resume-profile-tempo" v-if="!urlCon.url">Profile Here</div>
+      <p class="eam-resume-name" v-else><b> {{ documentData?.name }} </b></p>
+      <p class="eam-resume-address" v-if="address">Address: {{ address }}</p>
+      <p class="eam-resume-address" v-else> Address: {{ documentData?.address }} </p>
+      <div class="eam-resume-profile-tempo" v-if="!documentData?.photoURL">Profile Here</div>
       <div class="eam-resume-profile-picture" v-else>
-        <img :src="urlCon.url" alt="profile picture" >
+        <img :src="documentData?.photoURL" alt="profile picture" >
       </div>
-      <p class="eam-resume-mobile">Mobile Number: {{ mobile }}</p>
-      <p class="eam-resume-email">Email: {{ email }}</p>
+      <p class="eam-resume-mobile" v-if="mobile">Mobile Number: {{ mobile }}</p>
+      <p class="eam-resume-mobile" v-else>Mobile Number: {{ documentData?.mobile }}</p>
+      <p class="eam-resume-email" v-if="email">Email: {{ email }}</p>
+      <p class="eam-resume-email" v-else>Email: {{ documentData?.email }} </p>
+    </div>
+    <div class="eam-resume-objectives">
+      <p><b>OBJECTIVES</b></p>
+      <p>{{ objectives }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import fireUpload from '@/helpers/fireUpload'
+import fireGetCollection from '@/helpers/fireGetCollection'
 
 export default defineComponent({
   name: 'Resume',
@@ -25,12 +32,16 @@ export default defineComponent({
     name: String,
     address: String,
     mobile: String,
-    email: String
+    email: String,
+    objectives: String
   },
   setup() {
-    const { urlCon } = fireUpload()
+    const { documentData, getCollection } = fireGetCollection()
 
-    return { urlCon }
+
+    getCollection()
+
+    return { documentData }
   }
 });
 </script>
@@ -42,11 +53,13 @@ export default defineComponent({
   height: 100%;
   padding: 0;
   position: relative;
+  word-wrap: break-word;
 }
 .eam-resume p {
   margin-bottom: 0.5em;
 }
-.eam-resume-basic {
+.eam-resume-basic,
+.eam-resume-objectives {
   padding: 1em;
 }
 .eam-resume-name {
@@ -68,7 +81,7 @@ export default defineComponent({
   width: 8em;
 }
 
-.eam-resume-address {
-  max-width: 300px;
+p {
+  max-width: 20em;
 }
 </style>

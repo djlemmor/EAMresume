@@ -15,11 +15,7 @@ const fireUpload = () => {
         filePathCon.filePath = `profile/${user.value.uid}/${file.name}`
         const storageRef = ref(fireStorage, filePathCon.filePath);
         await uploadBytes(storageRef, file).then((snapshot) => {
-            console.log(storageRef);
-
-            console.log(urlCon.url)
             updateProfile(firebaseAuth.currentUser, { photoURL: storageRef.fullPath })
-            console.log(user)
         });
         urlCon.url = await getDownloadURL(storageRef)
     }

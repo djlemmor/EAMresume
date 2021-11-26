@@ -7,6 +7,7 @@ const error = ref(null)
 const { user } = fireUser()
 const signin = async(email, password) => {
     error.value = null
+    user.value = null
     await signInWithEmailAndPassword(firebaseAuth, email, password)
         .then((userCredential) => {
             // Signed in 

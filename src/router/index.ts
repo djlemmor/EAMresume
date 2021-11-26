@@ -5,8 +5,9 @@ import Login from '@/views/pages/Login.vue'
 import Register from '@/views/pages/Register.vue'
 import Format from '@/views/pages/Format.vue'
 import NotFound from '@/views/pages/NotFound.vue'
-import Basic from '@/views/resume/Basic.vue'
 import Dashboard from '@/views/pages/Dashboard.vue'
+import Basic from '@/views/resume/Basic.vue'
+import Objectives from '@/views/resume/Objectives.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,14 +36,19 @@ const routes: Array<RouteRecordRaw> = [
     component: Format
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+  {
     path: '/basic',
     name: 'Basic',
     component: Basic
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard
+    path: '/objectives',
+    name: 'Objectives',
+    component: Objectives
   },
   {
     path: '/:catchAll(.*)',

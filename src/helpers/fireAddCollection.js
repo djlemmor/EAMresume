@@ -7,10 +7,10 @@ const { user } = fireUser()
 const fireAddCollection = () => {
     const error = ref(null)
 
-    const addDocument = async(data) => {
+    const addDocument = async(documentName, data) => {
         error.value = null
         try {
-            await setDoc(doc(firestoreDB, "users", user.value.uid), data)
+            await setDoc(doc(firestoreDB, documentName, user.value.uid), data)
         } catch (err) {
             console.log(err.message)
             error.value = 'could not send the message'

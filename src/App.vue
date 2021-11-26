@@ -75,7 +75,6 @@ section {
 .eam-flex-col {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .eam-notify {
@@ -93,6 +92,12 @@ input, textarea {
 
 .error {
   color: crimson;
+  text-align: center;
+  margin-top: 1em;
+}
+
+.success {
+  color: rgb(13, 100, 39);
   text-align: center;
   margin-top: 1em;
 }

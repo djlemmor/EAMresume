@@ -4,7 +4,7 @@
       <div class="eam-contact-left eam-flex-col">
         <h2>Contact</h2>
         <p class="eam-notify">*Any questions and suggestions? Please contact us</p>
-        <form @submit.prevent="">
+        <form @submit.prevent="eamContact">
           <label>Name</label>
             <input v-model="name" type="text" required>
           <label>Email</label>
@@ -13,6 +13,8 @@
             <textarea v-model="message" required></textarea>
           <button>Send Message</button>
         </form>
+        <div class="error" v-if="error"> {{ error }} </div>
+        <div class="success" v-else> {{ success }} </div>
       </div>
       <div class="eam-contact-right">
         <iframe 
@@ -28,17 +30,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref } from 'vue'
+import fireAddCollection from '@/helpers/fireAddCollection'
+import fireGetCollection from '@/helpers/fireGetCollection'
 
 export default defineComponent({
   name: 'Contact',
   components: {},
   setup(){
-    const name = ref('');
-    const email = ref('');
-    const message = ref('');
+    const name = ref('')
+    const email = ref('')
+    const message = ref('')
+    const success = ref('')
+    const { error, addDocument } = fireAddCollection()
+    const { documentData, getCollection } = fireGetCollection()
+    
+    const eamContact = async () => {
+      const contactData = {
+        name: name.value,
+        email: email.value,
+        message: message.value
+      }
+      await addDocument('contact',contactData)
+      if(!error.value) {
+        success.value = "Thank You! For Contacting."
+      }
+    }
 
-    return { name, email, message }
+    getCollection()
+
+    return { name, email, message, error, success, documentData, eamContact }
   }
 });
 </script>

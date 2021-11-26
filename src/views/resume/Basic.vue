@@ -4,6 +4,9 @@
       <div class="eam-resume-left eam-flex-col">
         <h2>Basic Information</h2>
         <form @submit.prevent="eamSubmit">
+          <label>Upload your picture</label>
+            <input type="file" @change="eamUpload">
+            <div class="error">{{ fileError }}</div>
           <label>Name</label>
             <input v-model="name" type="text" required>
           <label>Address</label>
@@ -12,11 +15,9 @@
             <input v-model="mobile" type="text" required>
           <label>Email</label>
             <input v-model="email" type="email" required>
-          <label>Upload your picture</label>
-            <input type="file" @change="eamUpload" required>
-            <div class="error">{{ fileError }}</div>
           <button>NEXT</button>
         </form>
+        <div class="error">{{ dataChecker }}</div>
       </div>
       <div class="eam-resume-right">
         <Resume 
@@ -36,7 +37,8 @@ import Resume from '@/components/Resume.vue'
 import fireUpload from '@/helpers/fireUpload'
 import fireUser from '@/helpers/fireUser'
 import fireAddCollection from '@/helpers/fireAddCollection'
-
+import { useRouter } from 'vue-router'
+import fireGetCollection from '@/helpers/fireGetCollection'
 
 export default defineComponent({
   name: 'Basic',
@@ -48,12 +50,16 @@ export default defineComponent({
     const email = ref('')
     const file = ref(null)
     const fileError = ref('')
-    const { uploadImage } = fireUpload()
-    const { error, addDocument } = fireAddCollection()
-    const { user } = fireUser()
-    console.log(user.value)
-
+    const dataChecker = ref('')
     const types = ['image/png', 'image/jpg', 'image/jpeg']
+    const router = useRouter()
+    const { user } = fireUser()
+    const { urlCon, uploadImage } = fireUpload()
+    const { error, addDocument } = fireAddCollection()
+
+    if(!user.value) {
+      router.push({ name: 'Login' })
+    }
 
     const eamUpload = (e: any) => {
       const selected: any = e.target.files[0]
@@ -68,19 +74,25 @@ export default defineComponent({
     }
 
     const eamSubmit = async () => {
-      const resumeData = {
-        name: name.value,
-        address: address.value,
-        mobile: mobile.value,
-        email: email.value
+      if(file.value) {
+        const resumeData = {
+          name: name.value,
+          address: address.value,
+          mobile: mobile.value,
+          email: email.value,
+          photoURL: urlCon.url
+        }
+        await addDocument('users',resumeData)
+      } else {
+        dataChecker.value = 'Please fill out the fields'
       }
-      await addDocument(resumeData)
+      
       if(!error.value) {
-        console.log("data submitted")
+        router.push({ name: 'Objectives' })
       }
     }
 
-    return { name, email, address, mobile, eamUpload, fileError, eamSubmit }
+    return { name, email, address, mobile, dataChecker, fileError, eamUpload, eamSubmit }
   }
 });
 </script>
