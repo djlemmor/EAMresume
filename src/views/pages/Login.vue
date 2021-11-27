@@ -30,6 +30,7 @@
 import { defineComponent, ref } from 'vue';
 import fireSignin from '@/helpers/fireSignin'
 import { useRouter } from 'vue-router';
+import fireUser from '@/helpers/fireUser'
 
 export default defineComponent({
   name: 'Login',
@@ -37,6 +38,7 @@ export default defineComponent({
   setup(){
     const email = ref('');
     const password = ref('');
+    const { user } = fireUser()
     const { error, signin } = fireSignin()
     const router = useRouter()
 
@@ -46,6 +48,10 @@ export default defineComponent({
       if(!error.value) {
         router.push({ name: 'Dashboard' })
       }
+    }
+
+    if(user.value) {
+      router.push({ name: 'Dashboard' })
     }
 
     return { email, password, error, eamLogin }

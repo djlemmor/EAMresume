@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore"
 import fireUser from '@/helpers/fireUser'
 
 const { user } = fireUser()
-const documentData = ref(null)
+const documentData = ref()
 
 const getCollection = async() => {
     documentData.value = null
