@@ -16,6 +16,7 @@ const getCollection = async() => {
     } else {
         console.log("No such document!");
     }
+    console.log("DOCUMENT DATA", documentData.value)
 
 }
 

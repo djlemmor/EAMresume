@@ -6,8 +6,7 @@ import Register from '@/views/pages/Register.vue'
 import Format from '@/views/pages/Format.vue'
 import NotFound from '@/views/pages/NotFound.vue'
 import Dashboard from '@/views/pages/Dashboard.vue'
-import Basic from '@/views/resume/Basic.vue'
-import Objectives from '@/views/resume/Objectives.vue'
+import ResumeForm from '@/views/resume/ResumeForm.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,14 +40,9 @@ const routes: Array<RouteRecordRaw> = [
     component: Dashboard
   },
   {
-    path: '/basic',
-    name: 'Basic',
-    component: Basic
-  },
-  {
-    path: '/objectives',
-    name: 'Objectives',
-    component: Objectives
+    path: '/resumeform',
+    name: 'ResumeForm',
+    component: ResumeForm
   },
   {
     path: '/:catchAll(.*)',

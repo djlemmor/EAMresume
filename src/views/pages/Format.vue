@@ -6,9 +6,9 @@
         <p class="eam-notify">*As of now we only have 1 format at the moment</p>
         <div class="eam-resume-format">
           <div>
-            <router-link :to="{ name: 'Basic' }">
+            <router-link :to="{ name: 'ResumeForm' }">
               <img src="@/assets/resume.png" alt="resume photo">
-              <p>Default</p>
+              <p>DEFAULT</p>
             </router-link>
           </div>
         </div>

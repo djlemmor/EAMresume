@@ -2,7 +2,7 @@
   <section class="eam-resume-container">
     <div class="container">
       <div class="eam-resume-left eam-flex-col">
-        <h2>Basic Information</h2>
+        <h2>RESUME FORM</h2>
         <form @submit.prevent="eamSubmit">
           <label>Upload your picture</label>
             <input type="file" @change="eamUpload">
@@ -38,16 +38,19 @@ import fireUpload from '@/helpers/fireUpload'
 import fireUser from '@/helpers/fireUser'
 import fireAddCollection from '@/helpers/fireAddCollection'
 import { useRouter } from 'vue-router'
-import fireGetCollection from '@/helpers/fireGetCollection'
 
 export default defineComponent({
   name: 'Basic',
   components: { Resume },
   setup(){
+
     const name = ref('')
     const address = ref('')
     const mobile = ref('')
     const email = ref('')
+
+
+
     const file = ref(null)
     const fileError = ref('')
     const dataChecker = ref('')
@@ -55,7 +58,7 @@ export default defineComponent({
     const router = useRouter()
     const { user } = fireUser()
     const { urlCon, uploadImage } = fireUpload()
-    const { error, addDocument } = fireAddCollection()
+    const { error, usersDocument } = fireAddCollection()
 
     if(!user.value) {
       router.push({ name: 'Login' })
@@ -82,13 +85,13 @@ export default defineComponent({
           email: email.value,
           photoURL: urlCon.url
         }
-        await addDocument('users',resumeData)
+        await usersDocument(resumeData)
       } else {
         dataChecker.value = 'Please fill out the fields'
       }
       
       if(!error.value) {
-        router.push({ name: 'Objectives' })
+        console.log("NO ERROR")
       }
     }
 

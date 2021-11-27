@@ -5,8 +5,6 @@
       <img :src="documentData?.photoURL" alt="Profile Pic" v-if="documentData?.photoURL">
       <p>Display Name: {{ documentData?.name }}</p>
       <p class="email">Email: {{ documentData?.email }} </p>
-      <p class="mobile">Mobile: {{ documentData?.mobile }} </p>
-      <p class="address">Address: {{ documentData?.address }} </p>
       <div>
         <button @click="eamSignout" class="logout">LOGOUT</button>
       </div>
@@ -27,9 +25,15 @@ export default defineComponent({
   components: {},
   setup() {
     const router = useRouter()
-    const { error, signout } = fireSignout()
     const { user } = fireUser()
+    const { error, signout } = fireSignout()
     const { documentData, getCollection } = fireGetCollection()
+
+
+
+
+
+
 
     error.value = null
     const eamSignout = async () => {
@@ -38,6 +42,9 @@ export default defineComponent({
         router.push({ name: 'Home' })
       }
     }
+
+
+
 
     if(!user.value) {
       router.push({ name: 'Login' })

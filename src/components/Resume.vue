@@ -1,23 +1,26 @@
 <template>
   <div class="eam-resume">
+
+    <!-- BASIC INFO -->
     <div class="eam-resume-basic">
       <p class="eam-resume-name" v-if="name"><b> {{ name }} </b></p>
-      <p class="eam-resume-name" v-else><b> {{ documentData?.name }} </b></p>
-      <p class="eam-resume-address" v-if="address">Address: {{ address }}</p>
-      <p class="eam-resume-address" v-else> Address: {{ documentData?.address }} </p>
+      <p class="eam-resume-name" v-else><b> NAME </b></p>
+      <p class="eam-resume-address">Address: {{ address }}</p>
       <div class="eam-resume-profile-tempo" v-if="!documentData?.photoURL">Profile Here</div>
       <div class="eam-resume-profile-picture" v-else>
         <img :src="documentData?.photoURL" alt="profile picture" >
       </div>
-      <p class="eam-resume-mobile" v-if="mobile">Mobile Number: {{ mobile }}</p>
-      <p class="eam-resume-mobile" v-else>Mobile Number: {{ documentData?.mobile }}</p>
-      <p class="eam-resume-email" v-if="email">Email: {{ email }}</p>
-      <p class="eam-resume-email" v-else>Email: {{ documentData?.email }} </p>
+      <p class="eam-resume-mobile">Mobile Number: {{ mobile }}</p>
+      <p class="eam-resume-email">Email: {{ email }}</p>
     </div>
+
+    <!-- OBJECTIVES -->
     <div class="eam-resume-objectives">
       <p><b>OBJECTIVES</b></p>
       <p>{{ objectives }}</p>
     </div>
+
+    
   </div>
 </template>
 
@@ -37,10 +40,7 @@ export default defineComponent({
   },
   setup() {
     const { documentData, getCollection } = fireGetCollection()
-
-
     getCollection()
-
     return { documentData }
   }
 });

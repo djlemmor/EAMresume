@@ -31,7 +31,7 @@ export default defineComponent({
   setup(){
     const objectives = ref('')
     const router = useRouter()
-    const { error, addDocument } = fireAddCollection()
+    const { error, usersDocument } = fireAddCollection()
     const { user } = fireUser()
 
     if(!user.value) {
@@ -42,7 +42,7 @@ export default defineComponent({
       const resumeData = {
         objectives: objectives.value,
       }
-      await addDocument('users',resumeData)
+      await usersDocument(resumeData)
       if(!error.value) {
         console.log("test")
       }

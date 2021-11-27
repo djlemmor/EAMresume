@@ -32,7 +32,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import fireAddCollection from '@/helpers/fireAddCollection'
-import fireGetCollection from '@/helpers/fireGetCollection'
 
 export default defineComponent({
   name: 'Contact',
@@ -42,8 +41,7 @@ export default defineComponent({
     const email = ref('')
     const message = ref('')
     const success = ref('')
-    const { error, addDocument } = fireAddCollection()
-    const { documentData, getCollection } = fireGetCollection()
+    const { error, contactDocument } = fireAddCollection()
     
     const eamContact = async () => {
       const contactData = {
@@ -51,15 +49,13 @@ export default defineComponent({
         email: email.value,
         message: message.value
       }
-      await addDocument('contact',contactData)
+      await contactDocument(contactData)
       if(!error.value) {
-        success.value = "Thank You! For Contacting."
+        success.value = "Thank You! For Contacting Me."
       }
     }
 
-    getCollection()
-
-    return { name, email, message, error, success, documentData, eamContact }
+    return { name, email, message, error, success, eamContact }
   }
 });
 </script>
