@@ -7,16 +7,14 @@ const { user } = fireUser()
 const documentData = ref()
 
 const getCollection = async() => {
-    documentData.value = null
+    documentData.value = undefined
     const docRef = doc(firestoreDB, "users", user.value.uid);
     const docSnap = await getDoc(docRef);
-
     if (docSnap.exists()) {
         documentData.value = docSnap.data()
     } else {
-        console.log("No such document!");
+        console.log("No such document! Redirecting..");
     }
-    console.log("DOCUMENT DATA", documentData.value)
 
 }
 

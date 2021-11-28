@@ -29,9 +29,10 @@ export default defineComponent({
 }
 
 :root {
+    --eam-ivory: #E2DED0;
     --eam-gray: #746C70;
     --eam-cool-gray: #4E4F50;
-    --eam-ivory: #E2DED0;
+    --eam-blue: #517ea3;
     --eam-blue-gray: #647C90;
 }
 

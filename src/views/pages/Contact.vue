@@ -3,7 +3,7 @@
     <div class="container">
       <div class="eam-contact-left eam-flex-col">
         <h2>Contact</h2>
-        <p class="eam-notify">*Any questions and suggestions? Please contact us</p>
+        <p class="eam-notify">*Any Questions and Suggestions? Please Contact Us</p>
         <form @submit.prevent="eamContact">
           <label>Name</label>
             <input v-model="name" type="text" required>
@@ -51,7 +51,10 @@ export default defineComponent({
       }
       await contactDocument(contactData)
       if(!error.value) {
-        success.value = "Thank You! For Contacting Me."
+        name.value = ''
+        email.value = ''
+        message.value = ''
+        success.value = "Thank You! For Contacting Us."
       }
     }
 
@@ -64,24 +67,22 @@ export default defineComponent({
   .eam-contact {
     padding: 1em 0;
   }
-  
+  .eam-contact .container {
+    align-items: center;
+  }
   .eam-contact-left {
     padding-right: 1em;
   }
-
   .eam-contact-left textarea {
     height: 160px;
     max-height: 160px;
   }
-
   .eam-contact-left label {
     font-size: 1.2rem;
   }
-
   .eam-contact-left h2 {
     font-size: 2rem;
   }
-      
   .eam-contact-left button {
     font-size: 1.2rem;
     padding: 0.8em 2em;
@@ -91,8 +92,11 @@ export default defineComponent({
     color: #fff;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 1em;
   }
-
+  .eam-contact-left button:hover {
+    background-color: var(--eam-blue);
+  }
   .eam-contact-right {
     padding-left: 1em;
   }

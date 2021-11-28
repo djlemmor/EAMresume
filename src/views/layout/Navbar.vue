@@ -7,10 +7,10 @@
           </router-link>
       </div>
       <nav>
-        <router-link :to="{ name: 'Home' }">Home</router-link>
-        <router-link :to="{ name: 'Contact' }">Contact</router-link>
-        <router-link :to="{ name: 'Login' }" v-if="!user">Login</router-link>
-        <router-link :to="{ name: 'Dashboard' }" v-else>Dashboard</router-link>
+        <router-link :to="{ name: 'Home' }" class="eam-navlinks">Home</router-link>
+        <router-link :to="{ name: 'Contact' }" class="eam-navlinks">Contact</router-link>
+        <router-link :to="{ name: 'Login' }" v-if="!user" class="eam-navlinks">Login</router-link>
+        <router-link :to="{ name: 'Dashboard' }" v-else class="eam-navlinks">Dashboard</router-link>
         <router-link :to="{ name: 'Format' }">
           <div class="eam-create">
             CREATE
@@ -57,6 +57,7 @@ nav {
 
 nav a {
   padding: 0 1em;
+  position: relative;
 }
 
 nav a:last-child{
@@ -67,5 +68,24 @@ nav a:last-child{
   font-weight: bold;
   border: 1px solid var(--eam-ivory);
   padding: 0.5em 1em;
+}
+.eam-create:hover {
+  color: var(--eam-cool-gray);
+  background-color: var(--eam-ivory);
+}
+.eam-navlinks::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5em;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: #fff;
+  pointer-events: none;
+  transition: width 200ms linear;
+}
+
+.eam-navlinks:hover::after {
+  width: 100%;
 }
 </style>

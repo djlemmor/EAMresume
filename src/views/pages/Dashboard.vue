@@ -2,11 +2,10 @@
   <section class="eam-dashboard">
     <div class="container">
       <h1>Dashboard</h1>
-      <img :src="documentData?.photoURL" alt="Profile Pic" v-if="documentData?.photoURL">
-      <p>Display Name: {{ documentData?.name }}</p>
-      <p class="email">Email: {{ documentData?.email }} </p>
+      <p>Display Name: {{ user?.displayName }}</p>
+      <p class="email">Email: {{ user?.email }} </p>
       <div>
-        <button @click="eamSignout" class="logout">LOGOUT</button>
+        <button @click="eamSignout" class="eam-button-logout">LOGOUT</button>
       </div>
       <div class="error">{{ error }}</div>
     </div>
@@ -17,7 +16,6 @@
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import fireSignout from '@/helpers/fireSignout'
-import fireGetCollection from '@/helpers/fireGetCollection'
 import fireUser from '@/helpers/fireUser'
 
 export default defineComponent({
@@ -27,13 +25,6 @@ export default defineComponent({
     const router = useRouter()
     const { user } = fireUser()
     const { error, signout } = fireSignout()
-    const { documentData, getCollection } = fireGetCollection()
-
-
-
-
-
-
 
     error.value = null
     const eamSignout = async () => {
@@ -43,16 +34,11 @@ export default defineComponent({
       }
     }
 
-
-
-
     if(!user.value) {
       router.push({ name: 'Login' })
-    } else {
-      getCollection()
     }
 
-    return { error, documentData, eamSignout }
+    return { error, user, eamSignout }
   }
 });
 </script>
@@ -64,7 +50,7 @@ export default defineComponent({
 .container > * {
   margin-bottom: 1em;
 }
-.logout {
+.eam-button-logout {
   padding: 1em 1.5em;
   border: none;
   cursor: pointer;
@@ -73,7 +59,8 @@ export default defineComponent({
   font-weight: bold;
 }
 
-img {
-  width: 10rem;
+.eam-button-logout:hover {
+  background-color: var(--eam-blue);
 }
+
 </style>

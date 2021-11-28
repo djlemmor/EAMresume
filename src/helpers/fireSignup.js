@@ -29,9 +29,9 @@ const signup = async(email, password, displayName) => {
         })
         .catch((err) => {
             if (err.code == 'auth/email-already-in-use') {
-                error.value = 'The email is already in use'
+                error.value = 'The Email is Already in Use'
             } else if (err.code == 'auth/weak-password') {
-                error.value = 'Password should be at least 6 characters'
+                error.value = 'Password Should be at least 6 Characters'
             } else {
                 error.value = err.code
                 console.log(err)

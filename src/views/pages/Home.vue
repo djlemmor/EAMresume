@@ -33,17 +33,28 @@ export default defineComponent({
 .eam-home {
   padding: 6em 0;
 }
+
+.eam-home .container {
+  align-items: center;
+}
+
 .eam-home-left h1 {
   margin: 0.5em 0 1em 0;
   font-size: 3rem;
 }
+
 .eam-home-left h2 {
   opacity: 0.5;
 }
+
 .eam-create a{
   font-weight: bold;
   padding: 1em 2em;
   background-color: var(--eam-blue-gray);
   font-weight: normal;
+}
+
+.eam-create a:hover {
+  background-color: var(--eam-blue);
 }
 </style>

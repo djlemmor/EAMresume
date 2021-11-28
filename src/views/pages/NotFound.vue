@@ -2,7 +2,7 @@
   <section class="home">
     <div class="container">
       <div class="eam-notfound">
-        Not Found
+        404 Not Found
       </div>
     </div>
   </section>
@@ -23,6 +23,6 @@ export default defineComponent({
   font-size: 3rem;
   text-align: center;
   font-weight: bold;
-  color: var(--eam-blue-gray);
+  color: crimson;
 }
 </style>

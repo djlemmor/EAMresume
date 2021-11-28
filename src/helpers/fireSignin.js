@@ -15,9 +15,9 @@ const signin = async(email, password) => {
         })
         .catch((err) => {
             if (err.code == 'auth/wrong-password') {
-                error.value = 'Wrong password'
+                error.value = 'Wrong Password'
             } else if (err.code == 'auth/user-not-found') {
-                error.value = 'Wrong email or password'
+                error.value = 'Wrong Email or Password'
             } else {
                 error.value = err.code
             }

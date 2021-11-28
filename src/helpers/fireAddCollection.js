@@ -1,16 +1,16 @@
 import { ref } from '@vue/reactivity'
 import { firestoreDB } from '@/firebase/config'
-import { doc, setDoc, addDoc, collection } from 'firebase/firestore'
+import { doc, addDoc, collection, updateDoc } from 'firebase/firestore'
 import fireUser from '@/helpers/fireUser'
 
 const { user } = fireUser()
-
+const error = ref(null)
 const fireAddCollection = () => {
-    const error = ref(null)
+    error.value = null
+
     const usersDocument = async(data) => {
-        error.value = null
         try {
-            await setDoc(doc(firestoreDB, user.value.uid), data)
+            await updateDoc(doc(firestoreDB, "users", user.value.uid), data)
         } catch (err) {
             console.log(err.message)
             error.value = err.messag
@@ -26,6 +26,7 @@ const fireAddCollection = () => {
             error.value = 'Could not send the message'
         }
     }
+
     return { error, usersDocument, contactDocument }
 }
 

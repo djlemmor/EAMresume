@@ -27,6 +27,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import fireGetCollection from '@/helpers/fireGetCollection'
+import fireUser from '@/helpers/fireUser'
 
 export default defineComponent({
   name: 'Resume',
@@ -39,6 +40,8 @@ export default defineComponent({
     objectives: String
   },
   setup() {
+    const { user } = fireUser()
+    console.log(user.value)
     const { documentData, getCollection } = fireGetCollection()
     getCollection()
     return { documentData }
@@ -55,16 +58,22 @@ export default defineComponent({
   position: relative;
   word-wrap: break-word;
 }
+
 .eam-resume p {
   margin-bottom: 0.5em;
 }
-.eam-resume-basic,
-.eam-resume-objectives {
+
+.eam-resume-basic {
   padding: 1em;
+}
+
+.eam-resume-objectives {
+  padding: 0 1em;
 }
 .eam-resume-name {
   text-transform: uppercase;
 }
+
 .eam-resume-profile-tempo {
   text-align: right;
   border: 1px dashed var(--eam-cool-gray);
@@ -78,10 +87,10 @@ export default defineComponent({
   position: absolute;
   top: 1em;
   right: 1em;
-  width: 8em;
+  max-width: 6em;
 }
 
-p {
-  max-width: 20em;
+.eam-resume-objectives p {
+  max-width: 30em;
 }
 </style>

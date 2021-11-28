@@ -17,7 +17,7 @@
             <input v-model="email" type="email" required>
           <label>Password</label>
             <input v-model="password" type="password" required>
-          <button>Register</button>
+          <button :disabled="disable">Register</button>
         </form>
       </div>
       <div class="error">{{ error }}</div>
@@ -27,8 +27,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import fireSignup from '@/helpers/fireSignup'
 import { useRouter } from 'vue-router';
+import fireSignup from '@/helpers/fireSignup'
+import fireUser from '@/helpers/fireUser'
 
 export default defineComponent({
   name: 'Register',
@@ -37,18 +38,27 @@ export default defineComponent({
     const displayName = ref('')
     const email = ref('')
     const password = ref('')
+    const disable = ref(false)
+    const { user } = fireUser()
     const { error, signup } = fireSignup()
     const router = useRouter()
 
     error.value = null
     const eamRegister = async () => { 
+      disable.value = true
       await signup(email.value, password.value, displayName.value)
       if(!error.value) {
         router.push({ name: 'Dashboard' })
+      } else {
+        disable.value = false
       }
     }
 
-    return { displayName, email, password, eamRegister, error }
+    if(user.value) {
+      router.push({ name: 'Dashboard' })
+    }
+
+    return { displayName, email, password, disable, error, eamRegister }
   }
 });
 </script>
@@ -95,10 +105,14 @@ export default defineComponent({
   .eam-register-container button {
     font-size: 1.2rem;
     padding: 0.8em 2em;
-    border: 1px solid var(--eam-cool-gray);
-    border-radius: 100px;
+    border: none;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 1em;
+  }
+
+  .eam-register-container button:hover {
+    background-color: #fff;
   }
 
 </style>

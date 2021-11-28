@@ -16,8 +16,8 @@
           <label>Password</label>
             <input v-model="password" type="password" required>
           <div class="eam-buttons">
-            <button>Login</button>
-            <router-link :to="{ name: 'Register' }">Register</router-link>
+            <button :disabled="disable" class="eam-button-login">Login</button>
+            <router-link :to="{ name: 'Register' }" class="eam-button-register">Register</router-link>
           </div>
         </form>
       </div>
@@ -38,15 +38,19 @@ export default defineComponent({
   setup(){
     const email = ref('');
     const password = ref('');
+    const disable = ref(false)
+    const router = useRouter()
     const { user } = fireUser()
     const { error, signin } = fireSignin()
-    const router = useRouter()
 
     error.value = null
     const eamLogin = async () => {
+      disable.value = true
       await signin(email.value, password.value)
       if(!error.value) {
         router.push({ name: 'Dashboard' })
+      } else {
+        disable.value = false
       }
     }
 
@@ -54,7 +58,7 @@ export default defineComponent({
       router.push({ name: 'Dashboard' })
     }
 
-    return { email, password, error, eamLogin }
+    return { email, password, disable, error, eamLogin }
   }
 });
 </script>
@@ -63,9 +67,11 @@ export default defineComponent({
   .eam-login {
     padding: 6em 0;
   }
+
   .eam-login .container {
     flex-direction: column;
   }
+  
   .eam-login-container {
     margin: 0 10em;
     padding: 2em;
@@ -97,22 +103,33 @@ export default defineComponent({
   .eam-login-container h2 {
     font-size: 2rem;
   }
-      
-  .eam-login-container button {
-    font-size: 1.2rem;
-    padding: 0.8em 2em;
-    border: 1px solid var(--eam-cool-gray);
-    border-radius: 100px;
-    font-weight: bold;
-    cursor: pointer;
-  }
 
   .eam-buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    text-decoration: underline;
-    margin-top: 1em;
+    margin-top: 2em;
+  }
+      
+  .eam-button-login {
+    font-size: 1.2rem;
+    padding: 0.8em 2em;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .eam-button-login:hover {
+    background-color: #fff;
+  }
+
+  .eam-button-register {
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .eam-button-register:hover {
+    color: var(--eam-ivory);
   }
 
 </style>

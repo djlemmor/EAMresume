@@ -2,11 +2,11 @@
   <section class="eam-format">
     <div class="container">
       <div class="eam-format-container">
-        <h2>Choose your resume format</h2>
-        <p class="eam-notify">*As of now we only have 1 format at the moment</p>
+        <h2>Choose Your Resume Format</h2>
+        <p class="eam-notify">*As of now we only have 1 resume format. More coming soon</p>
         <div class="eam-resume-format">
           <div>
-            <router-link :to="{ name: 'ResumeForm' }">
+            <router-link :to="{ name: 'ResumeForm', params: { section: 'basic' } }">
               <img src="@/assets/resume.png" alt="resume photo">
               <p>DEFAULT</p>
             </router-link>

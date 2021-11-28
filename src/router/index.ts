@@ -40,9 +40,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Dashboard
   },
   {
-    path: '/resumeform',
+    path: '/resumeform/:section',
     name: 'ResumeForm',
-    component: ResumeForm
+    component: ResumeForm,
+    props: true
   },
   {
     path: '/:catchAll(.*)',
