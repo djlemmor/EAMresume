@@ -8,6 +8,7 @@
 import { defineComponent } from 'vue';
 import Navbar from '@/views/layout/Navbar.vue';
 import Footer from '@/views/layout/Footer.vue';
+import store from '@/store';
 
 export default defineComponent({
   name: 'App',
@@ -15,6 +16,10 @@ export default defineComponent({
     Navbar,
     Footer
   },
+  mounted() {
+    store.dispatch('getUser')
+    store.dispatch('getUserData')
+  }
 });
 </script>
 <style>

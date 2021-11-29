@@ -7,6 +7,7 @@ import Format from '@/views/pages/Format.vue'
 import NotFound from '@/views/pages/NotFound.vue'
 import Dashboard from '@/views/pages/Dashboard.vue'
 import ResumeForm from '@/views/resume/ResumeForm.vue'
+import Test from '@/components/Test.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'ResumeForm',
     component: ResumeForm,
     props: true
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
   },
   {
     path: '/:catchAll(.*)',
