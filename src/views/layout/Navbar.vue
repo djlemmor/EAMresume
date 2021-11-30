@@ -4,35 +4,44 @@
       <div class="eam-logo">
         <router-link :to="{ name: 'Home' }">
           <span>EAM</span>resume
-          </router-link>
-      </div>
-      <nav>
-        <router-link :to="{ name: 'Home' }" class="eam-navlinks">Home</router-link>
-        <router-link :to="{ name: 'Contact' }" class="eam-navlinks">Contact</router-link>
-        <router-link :to="{ name: 'Login' }" v-if="!user" class="eam-navlinks">Login</router-link>
-        <router-link :to="{ name: 'Dashboard' }" v-else class="eam-navlinks">Dashboard</router-link>
-        <router-link :to="{ name: 'Format' }">
-          <div class="eam-create">
-            CREATE
-          </div>
         </router-link>
-      </nav>
+      </div>
+      <template v-if="userIsReady">
+        <nav>
+          <router-link :to="{ name: 'Home' }" class="eam-navlinks"
+            >Home</router-link
+          >
+          <router-link :to="{ name: 'Contact' }" class="eam-navlinks"
+            >Contact</router-link
+          >
+          <router-link :to="{ name: 'Login' }" v-if="!user" class="eam-navlinks"
+            >Login</router-link
+          >
+          <router-link :to="{ name: 'Dashboard' }" v-else class="eam-navlinks"
+            >Dashboard</router-link
+          >
+          <router-link :to="{ name: 'Format' }">
+            <div class="eam-create">CREATE</div>
+          </router-link>
+        </nav>
+      </template>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import fireUser from '@/helpers/fireUser'
+import store from "@/store";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Navbar',
+  name: "Navbar",
   components: {},
   setup() {
-    const { user } = fireUser()
-
-    return { user }
-  }
+    return {
+      user: computed(() => store.state.user),
+      userIsReady: computed(() => store.state.userIsReady),
+    };
+  },
 });
 </script>
 
@@ -60,7 +69,7 @@ nav a {
   position: relative;
 }
 
-nav a:last-child{
+nav a:last-child {
   padding: 0;
 }
 .eam-create {
@@ -74,7 +83,7 @@ nav a:last-child{
   background-color: var(--eam-ivory);
 }
 .eam-navlinks::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -1.5em;
   left: 0;
