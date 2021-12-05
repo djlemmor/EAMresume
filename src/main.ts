@@ -2,14 +2,12 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-/* import { firebaseAuth } from '@/firebase/config'
-import { onAuthStateChanged } from "firebase/auth" */
+import { VueCookieNext } from 'vue-cookie-next'
 
-createApp(App).use(store).use(router).mount('#app')
-/* let app: any
+VueCookieNext.config({
+  expire: '2h',
+  path: '/',
+  sameSite: 'Strict'
+});
 
-onAuthStateChanged(firebaseAuth, () => {
-  if (!app) {
-    app = createApp(App).use(store).use(router).mount('#app')
-  }
-}) */
+createApp(App).use(store).use(router).use(VueCookieNext).mount('#app')

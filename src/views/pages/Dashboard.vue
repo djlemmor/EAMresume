@@ -1,9 +1,10 @@
 <template>
+  <vue-element-loading :active="userData.status == 'notlogin'" is-full-screen />
   <section class="eam-dashboard">
     <div class="container">
       <h1>Dashboard</h1>
-      <p>Display Name: {{ user?.displayName }}</p>
-      <p class="email">Email: {{ user?.email }}</p>
+      <p>Display Name: {{ userData.name }}</p>
+      <p class="email">Email: {{ userData.email }}</p>
       <div>
         <button @click="eamSignout" class="eam-button-logout">LOGOUT</button>
       </div>
@@ -13,32 +14,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import store from "@/store";
+import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import fireSignout from "@/helpers/fireSignout";
-import fireUser from "@/helpers/fireUser";
+import { isLoggin } from "@/helpers/authHelper";
+import VueElementLoading from "vue-element-loading";
 
 export default defineComponent({
   name: "Dashboard",
-  components: {},
+  components: {
+    VueElementLoading,
+  },
   setup() {
     const router = useRouter();
-    const { user } = fireUser();
-    const { error, signout } = fireSignout();
+    const error = ref("");
+    const disable = ref(true);
 
-    error.value = null;
     const eamSignout = async () => {
-      await signout();
-      if (!error.value) {
+      try {
+        await store.dispatch("signout");
         router.push({ name: "Home" });
+      } catch (err: any) {
+        console.log(err);
+        error.value = err;
       }
     };
 
-    /* if(!user.value) {
-      router.push({ name: 'Login' })
-    } */
+    if (!isLoggin()) {
+      router.push({ name: "Login" });
+    }
 
-    return { error, user, eamSignout };
+    store.dispatch("getUserData");
+
+    return {
+      error,
+      disable,
+      eamSignout,
+      userData: computed(() => store.state.userData),
+    };
   },
 });
 </script>

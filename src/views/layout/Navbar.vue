@@ -6,25 +6,27 @@
           <span>EAM</span>resume
         </router-link>
       </div>
-      <template v-if="userIsReady">
-        <nav>
-          <router-link :to="{ name: 'Home' }" class="eam-navlinks"
-            >Home</router-link
-          >
-          <router-link :to="{ name: 'Contact' }" class="eam-navlinks"
-            >Contact</router-link
-          >
-          <router-link :to="{ name: 'Login' }" v-if="!user" class="eam-navlinks"
-            >Login</router-link
-          >
-          <router-link :to="{ name: 'Dashboard' }" v-else class="eam-navlinks"
-            >Dashboard</router-link
-          >
-          <router-link :to="{ name: 'Format' }">
-            <div class="eam-create">CREATE</div>
-          </router-link>
-        </nav>
-      </template>
+      <nav>
+        <router-link :to="{ name: 'Home' }" class="eam-navlinks"
+          >Home</router-link
+        >
+        <router-link :to="{ name: 'Contact' }" class="eam-navlinks"
+          >Contact</router-link
+        >
+        <router-link
+          :to="{ name: 'Login' }"
+          v-if="userData.status == 'notlogin'"
+          class="eam-navlinks"
+          >Login</router-link
+        >
+        <router-link :to="{ name: 'Dashboard' }" v-else class="eam-navlinks"
+          >Dashboard</router-link
+        >
+
+        <router-link :to="{ name: 'Format' }">
+          <div class="eam-create">CREATE</div>
+        </router-link>
+      </nav>
     </div>
   </header>
 </template>
@@ -38,8 +40,7 @@ export default defineComponent({
   components: {},
   setup() {
     return {
-      user: computed(() => store.state.user),
-      userIsReady: computed(() => store.state.userIsReady),
+      userData: computed(() => store.state.userData),
     };
   },
 });

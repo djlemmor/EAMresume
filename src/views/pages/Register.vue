@@ -1,4 +1,5 @@
 <template>
+  <vue-element-loading :active="disable" is-full-screen />
   <section class="eam-register">
     <div class="container">
       <div class="eam-register-container">
@@ -33,35 +34,49 @@
 </template>
 
 <script lang="ts">
+import store from "@/store";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import fireSignup from "@/helpers/fireSignup";
-import fireUser from "@/helpers/fireUser";
+import { isLoggin } from "@/helpers/authHelper";
+import VueElementLoading from "vue-element-loading";
 
 export default defineComponent({
   name: "Register",
-  components: {},
+  components: {
+    VueElementLoading,
+  },
   setup() {
     const displayName = ref("");
     const email = ref("");
     const password = ref("");
+    const error = ref("");
     const disable = ref(false);
-    const { user } = fireUser();
-    const { error, signup } = fireSignup();
     const router = useRouter();
 
-    error.value = null;
     const eamRegister = async () => {
       disable.value = true;
-      await signup(email.value, password.value, displayName.value);
-      if (!error.value) {
+      const userCred = {
+        displayName: displayName.value,
+        email: email.value,
+        password: password.value,
+      };
+      try {
+        await store.dispatch("signup", userCred);
         router.push({ name: "Dashboard" });
-      } else {
+      } catch (err: any) {
+        if (err.code == "auth/email-already-in-use") {
+          error.value = "The Email is Already in Use";
+        } else if (err.code == "auth/weak-password") {
+          error.value = "Password Should be at least 6 Characters";
+        } else {
+          error.value = err.code;
+          console.log(err);
+        }
         disable.value = false;
       }
     };
 
-    if (user.value) {
+    if (isLoggin()) {
       router.push({ name: "Dashboard" });
     }
 

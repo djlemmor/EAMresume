@@ -1,14 +1,15 @@
 <template>
   <div class="eam-resume">
-
     <!-- BASIC INFO -->
     <div class="eam-resume-basic">
-      <p class="eam-resume-name" v-if="name"><b> {{ name }} </b></p>
+      <p class="eam-resume-name" v-if="name">
+        <b> {{ name }} </b>
+      </p>
       <p class="eam-resume-name" v-else><b> NAME </b></p>
       <p class="eam-resume-address">Address: {{ address }}</p>
-      <div class="eam-resume-profile-tempo" v-if="!documentData?.photoURL">Profile Here</div>
-      <div class="eam-resume-profile-picture" v-else>
-        <img :src="documentData?.photoURL" alt="profile picture" >
+      <div class="eam-resume-profile-tempo">Profile Here</div>
+      <div class="eam-resume-profile-picture">
+        <img alt="profile picture" />
       </div>
       <p class="eam-resume-mobile">Mobile Number: {{ mobile }}</p>
       <p class="eam-resume-email">Email: {{ email }}</p>
@@ -19,33 +20,25 @@
       <p><b>OBJECTIVES</b></p>
       <p>{{ objectives }}</p>
     </div>
-
-    
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import fireGetCollection from '@/helpers/fireGetCollection'
-import fireUser from '@/helpers/fireUser'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Resume',
+  name: "Resume",
   components: {},
   props: {
     name: String,
     address: String,
     mobile: String,
     email: String,
-    objectives: String
+    objectives: String,
   },
   setup() {
-    const { user } = fireUser()
-    console.log(user.value)
-    const { documentData, getCollection } = fireGetCollection()
-    getCollection()
-    return { documentData }
-  }
+    return {};
+  },
 });
 </script>
 

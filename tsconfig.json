@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -33,9 +32,8 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/firebaseConfig.js", "src/firebase/config.js"  ],
   "exclude": [
     "node_modules",
-    "src/firebase"
   ]
 }
