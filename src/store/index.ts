@@ -1,40 +1,30 @@
 import { createStore } from 'vuex'
 import { firestoreDB } from '@/firebase/config'
-import { firebaseAuth } from '@/firebase/config'
-import {
-  doc,
-  getDoc,
-  setDoc,
-  addDoc,
-  collection
-} from "firebase/firestore"
+import { firebaseAuth, fireStorage } from '@/firebase/config'
+import { doc, getDoc, setDoc, addDoc, collection, updateDoc } from "firebase/firestore"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { saveUserUID, removeUserUID, getUserUID } from '@/helpers/authHelper';
-
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
   signOut
 } from "firebase/auth";
+import { USER } from '@/common/constants';
 
 export default createStore({
   state: {
-    userData: {
-      name: '',
-      email: '',
-      status: 'notlogin'
-    },
+    userData: USER
   },
   mutations: {
     setUserData(state, payload) {
       state.userData = payload
     },
+    setUserPhotoURL(state, payload) {
+      state.userData.photoURL = payload
+    },
     signoutUser(state) {
-      state.userData = {
-        name: '',
-        email: '',
-        status: 'notlogin'
-      }
+      state.userData = USER
     },
   },
   actions: {
@@ -61,6 +51,7 @@ export default createStore({
       try {
         saveUserUID(res.user.uid)
         await dispatch('getUserData')
+        console.log("User", res.user)
       } catch (error) {
         console.log("Signin Error", error)
       }
@@ -85,11 +76,36 @@ export default createStore({
       }
     },
 
+    async updateUserData({ commit }, data) {
+      const uid = getUserUID();
+      try {
+        await updateDoc(doc(firestoreDB, "users", uid), data)
+      } catch (error) {
+        console.log("SendContact Error", error)
+      }
+    },
+
     async sendContact({ commit }, contactData) {
       try {
         await addDoc(collection(firestoreDB, "contact"), contactData);
       } catch (error) {
         console.log("SendContact Error", error)
+      }
+    },
+
+    async uploadImage({ commit }, file) {
+      const uid = getUserUID();
+      try {
+        const filePath = `profile/${uid}/${file.name}`
+        const storageRef = ref(fireStorage, filePath);
+        await uploadBytes(storageRef, file).then(() => {
+          console.log("Upload Success")
+        });
+        const url = await getDownloadURL(storageRef)
+        await updateDoc(doc(firestoreDB, "users", uid), { photoURL: url })
+        commit('setUserPhotoURL', url)
+      } catch (error) {
+        console.log("Upload Image Error", error)
       }
     },
   },

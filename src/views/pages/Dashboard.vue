@@ -28,7 +28,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const error = ref("");
-    const disable = ref(true);
 
     const eamSignout = async () => {
       try {
@@ -48,7 +47,6 @@ export default defineComponent({
 
     return {
       error,
-      disable,
       eamSignout,
       userData: computed(() => store.state.userData),
     };

@@ -1,13 +1,13 @@
 <template>
+  <vue-element-loading :active="userData.status == 'notlogin'" is-full-screen />
   <section class="eam-resume-container">
     <div class="container">
       <div class="eam-resume-left eam-flex-col">
         <h2>RESUME FORM</h2>
-        <form action="">
-          <!-- <form @submit.prevent="eamSubmit"> -->
+        <form @submit.prevent="eamSubmit">
           <div v-if="section == 'basic'">
             <label>Upload your picture</label>
-            <!-- <input type="file" @change="eamUpload" /> -->
+            <input type="file" @change="eamUpload" />
             <div class="error">{{ fileError }}</div>
             <label>Name</label>
             <input v-model="name" type="text" required />
@@ -22,8 +22,16 @@
             <label>Objectives</label>
             <textarea v-model="objectives" required></textarea>
           </div>
+          <div v-else-if="section == 'skills'">
+            <label>Skills</label>
+            <div v-for="(skill, index) in skills" :key="index">
+              <input v-model="skills[index]" type="text" required />
+            </div>
+            {{ skills }}
+          </div>
           <button>NEXT</button>
         </form>
+        <button @click="add">ADD</button>
         <div class="error">{{ dataChecker }}</div>
       </div>
       <div class="eam-resume-right">
@@ -33,6 +41,7 @@
           :mobile="mobile"
           :email="email"
           :objectives="objectives"
+          :skills="skills"
         />
       </div>
     </div>
@@ -40,14 +49,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import Resume from "@/components/Resume.vue";
 import { isLoggin } from "@/helpers/authHelper";
+import Resume from "@/components/Resume.vue";
+import store from "@/store";
+import VueElementLoading from "vue-element-loading";
 
 export default defineComponent({
   name: "ResumeForm",
-  components: { Resume },
+  components: { Resume, VueElementLoading },
   props: {
     section: String,
   },
@@ -57,71 +68,104 @@ export default defineComponent({
     const mobile = ref("");
     const email = ref("");
     const objectives = ref("");
+    const skills = ref([""]);
 
     const file = ref(null);
     const fileError = ref("");
     const dataChecker = ref("");
     const types = ["image/png", "image/jpg", "image/jpeg"];
     const router = useRouter();
-    /* const { user } = fireUser();
-    const { uploadImage } = fireUpload();
-    const { error, usersDocument } = fireAddCollection();
-    const { documentData } = fireGetCollection(); */
 
-    /* if (!user.value) {
-      router.push({ name: "Login" });
-    } */
+    store.dispatch("getUserData");
+    const userPhotoURL = store.state.userData.photoURL;
 
-    /* const eamUpload = (e: any) => {
+    const eamUpload = async (e: any) => {
       const selected: any = e.target.files[0];
-      if (
-        (selected && types.includes(selected.type)) ||
-        documentData.value.photoURL
-      ) {
+      if (selected && types.includes(selected.type)) {
         file.value = selected;
         fileError.value = "";
-        uploadImage(file.value);
+
+        try {
+          await store.dispatch("uploadImage", file.value);
+        } catch (err: any) {
+          console.log(err);
+          fileError.value = err;
+        }
       } else {
         file.value = null;
         fileError.value = "Please Select An Image File (png, jpg, jpeg)";
       }
-    }; */
+    };
 
-    /* const eamSubmit = async () => {
+    const eamSubmit = async () => {
+      /* BASIC INFO */
       if (props.section == "basic") {
         if (mobile.value.length > 13) {
           dataChecker.value = "The Fields Length Exceeds Maximum";
         } else {
           dataChecker.value = "";
-          if (file.value || documentData.value.photoURL) {
+          if (file.value || userPhotoURL) {
             const basicData = {
               name: name.value,
               address: address.value,
               mobile: mobile.value,
               email: email.value,
             };
-            await usersDocument(basicData);
-            router.push({
-              name: "ResumeForm",
-              params: { section: "objectives" },
-            });
+            try {
+              await store.dispatch("updateUserData", basicData);
+              router.push({
+                name: "ResumeForm",
+                params: { section: "objectives" },
+              });
+            } catch (err: any) {
+              console.log(err);
+              fileError.value = err;
+            }
           } else {
             dataChecker.value = "Please Fill Out All The Fields";
           }
         }
-      } else {
+      } else if (props.section == "objectives") {
+        /* OBJECTIVES */
         const objectivesData = {
           objectives: objectives.value,
         };
-        await usersDocument(objectivesData);
-        console.log("PROPS TEST");
+        try {
+          await store.dispatch("updateUserData", objectivesData);
+          router.push({
+            name: "ResumeForm",
+            params: { section: "skills" },
+          });
+        } catch (err: any) {
+          console.log(err);
+          dataChecker.value = "Please Fill Out All The Fields";
+        }
+      } else if (props.section == "skills") {
+        /* SKILLS */
+        const skillsData = {
+          skills: skills.value,
+        };
+        try {
+          await store.dispatch("updateUserData", skillsData);
+          router.push({
+            name: "ResumeForm",
+            params: { section: "skills" },
+          });
+        } catch (err: any) {
+          console.log(err);
+          dataChecker.value = "Please Fill Out All The Fields";
+        }
       }
-
-    }; */
+    };
 
     if (!isLoggin()) {
       router.push({ name: "Login" });
     }
+
+    const add = () => {
+      skills.value.push("");
+      console.log(skills.value);
+    };
 
     return {
       name,
@@ -129,10 +173,13 @@ export default defineComponent({
       address,
       mobile,
       objectives,
+      skills,
       dataChecker,
       fileError,
-      /* eamUpload,
-      eamSubmit, */
+      eamUpload,
+      eamSubmit,
+      add,
+      userData: computed(() => store.state.userData),
     };
   },
 });
@@ -176,5 +223,9 @@ input[type="file"] {
 
 .eam-resume-right {
   padding-left: 1em;
+}
+
+.eam-resume-left button:hover {
+  background-color: var(--eam-blue);
 }
 </style>

@@ -2,29 +2,67 @@
   <div class="eam-resume">
     <!-- BASIC INFO -->
     <div class="eam-resume-basic">
-      <p class="eam-resume-name" v-if="name">
+      <!-- NAME -->
+      <p class="eam-resume-name" v-if="userData.name">
+        <b> {{ userData.name }} </b>
+      </p>
+      <p class="eam-resume-name" v-else-if="name">
         <b> {{ name }} </b>
       </p>
       <p class="eam-resume-name" v-else><b> NAME </b></p>
-      <p class="eam-resume-address">Address: {{ address }}</p>
-      <div class="eam-resume-profile-tempo">Profile Here</div>
-      <div class="eam-resume-profile-picture">
-        <img alt="profile picture" />
+
+      <!-- ADDRESS -->
+      <p class="eam-resume-address" v-if="userData.address">
+        Address: {{ userData.address }}
+      </p>
+      <p class="eam-resume-address" v-else>Address: {{ address }}</p>
+
+      <!-- PROFILE PICTURE -->
+      <div class="eam-resume-profile-picture" v-if="userData.photoURL">
+        <img :src="userData.photoURL" alt="profile picture" />
       </div>
-      <p class="eam-resume-mobile">Mobile Number: {{ mobile }}</p>
-      <p class="eam-resume-email">Email: {{ email }}</p>
+      <div class="eam-resume-profile-tempo" v-else>Profile Here</div>
+
+      <!-- MOBILE NUMBER -->
+      <p class="eam-resume-mobile" v-if="userData.mobile">
+        Mobile Number: {{ userData.mobile }}
+      </p>
+      <p class="eam-resume-mobile" v-else>Mobile Number: {{ mobile }}</p>
+
+      <!-- EMAIL -->
+      <p class="eam-resume-email" v-if="userData.email">
+        Email: {{ userData.email }}
+      </p>
+      <p class="eam-resume-email" v-else>Email: {{ email }}</p>
     </div>
 
     <!-- OBJECTIVES -->
     <div class="eam-resume-objectives">
-      <p><b>OBJECTIVES</b></p>
-      <p>{{ objectives }}</p>
+      <p><b>OBJECTIVES:</b></p>
+      <p v-if="userData.objectives">{{ userData.objectives }}</p>
+      <p v-else>{{ objectives }}</p>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="eam-resume-skills">
+      <p><b>SUMMARY OF SKILLS:</b></p>
+      <div v-if="skills[0]">
+        <p v-for="(skill, index) in skills" :key="index">
+          {{ skill }}
+        </p>
+      </div>
+      <div v-else-if="userData.skills">
+        <p v-for="skill in userData.skills" :key="skill">
+          {{ skill }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import store from "@/store";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   name: "Resume",
@@ -35,9 +73,15 @@ export default defineComponent({
     mobile: String,
     email: String,
     objectives: String,
+    skills: {
+      type: Array,
+      required: true,
+    },
   },
   setup() {
-    return {};
+    return {
+      userData: computed(() => store.state.userData),
+    };
   },
 });
 </script>
@@ -60,8 +104,9 @@ export default defineComponent({
   padding: 1em;
 }
 
-.eam-resume-objectives {
-  padding: 0 1em;
+.eam-resume-objectives,
+.eam-resume-skills {
+  padding: 0 1em 1em 1em;
 }
 .eam-resume-name {
   text-transform: uppercase;
