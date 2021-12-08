@@ -80,7 +80,7 @@ export default defineComponent({
 
 <style scoped>
 .eam-contact {
-  padding: 1em 0;
+  padding: 4em 0;
 }
 .eam-contact .container {
   align-items: center;

@@ -3,19 +3,17 @@
     <!-- BASIC INFO -->
     <div class="eam-resume-basic">
       <!-- NAME -->
-      <p class="eam-resume-name" v-if="userData.name">
-        <b> {{ userData.name }} </b>
-      </p>
-      <p class="eam-resume-name" v-else-if="name">
+      <p class="eam-resume-name" v-if="name">
         <b> {{ name }} </b>
+      </p>
+      <p class="eam-resume-name" v-else-if="userData.name">
+        <b> {{ userData.name }} </b>
       </p>
       <p class="eam-resume-name" v-else><b> NAME </b></p>
 
       <!-- ADDRESS -->
-      <p class="eam-resume-address" v-if="userData.address">
-        Address: {{ userData.address }}
-      </p>
-      <p class="eam-resume-address" v-else>Address: {{ address }}</p>
+      <p class="eam-resume-address" v-if="address">Address: {{ address }}</p>
+      <p class="eam-resume-address" v-else>Address: {{ userData.address }}</p>
 
       <!-- PROFILE PICTURE -->
       <div class="eam-resume-profile-picture" v-if="userData.photoURL">
@@ -24,23 +22,21 @@
       <div class="eam-resume-profile-tempo" v-else>Profile Here</div>
 
       <!-- MOBILE NUMBER -->
-      <p class="eam-resume-mobile" v-if="userData.mobile">
+      <p class="eam-resume-mobile" v-if="mobile">Mobile Number: {{ mobile }}</p>
+      <p class="eam-resume-mobile" v-else>
         Mobile Number: {{ userData.mobile }}
       </p>
-      <p class="eam-resume-mobile" v-else>Mobile Number: {{ mobile }}</p>
 
       <!-- EMAIL -->
-      <p class="eam-resume-email" v-if="userData.email">
-        Email: {{ userData.email }}
-      </p>
-      <p class="eam-resume-email" v-else>Email: {{ email }}</p>
+      <p class="eam-resume-email" v-if="email">Email: {{ email }}</p>
+      <p class="eam-resume-email" v-else>Email: {{ userData.email }}</p>
     </div>
 
     <!-- OBJECTIVES -->
     <div class="eam-resume-objectives">
       <p><b>OBJECTIVES:</b></p>
-      <p v-if="userData.objectives">{{ userData.objectives }}</p>
-      <p v-else>{{ objectives }}</p>
+      <p v-if="objectives">{{ objectives }}</p>
+      <p v-else>{{ userData.objectives }}</p>
     </div>
 
     <!-- SKILLS -->
@@ -68,11 +64,26 @@ export default defineComponent({
   name: "Resume",
   components: {},
   props: {
-    name: String,
-    address: String,
-    mobile: String,
-    email: String,
-    objectives: String,
+    name: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    mobile: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    objectives: {
+      type: String,
+      required: true,
+    },
     skills: {
       type: Array,
       required: true,
@@ -94,6 +105,7 @@ export default defineComponent({
   padding: 0;
   position: relative;
   word-wrap: break-word;
+  min-height: 600px;
 }
 
 .eam-resume p {

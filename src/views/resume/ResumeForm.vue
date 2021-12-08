@@ -27,11 +27,28 @@
             <div v-for="(skill, index) in skills" :key="index">
               <input v-model="skills[index]" type="text" required />
             </div>
-            {{ skills }}
           </div>
-          <button>NEXT</button>
+          <button type="submit" class="eam-resume-submit">SUBMIT</button>
+          <div class="eam-resume-action-buttons" v-show="section == 'skills'">
+            <button @click="eamAdd" type="button">ADD</button>
+            <button @click="eamRemove" type="button" v-show="skills.length > 1">
+              REMOVE
+            </button>
+          </div>
+          <div class="eam-resume-nav-buttons">
+            <button
+              @click="eamBack"
+              v-show="section != 'basic'"
+              class="eam-resume-back"
+              type="button"
+            >
+              BACK
+            </button>
+            <button @click="eamNext" class="eam-resume-next" type="button">
+              NEXT
+            </button>
+          </div>
         </form>
-        <button @click="add">ADD</button>
         <div class="error">{{ dataChecker }}</div>
       </div>
       <div class="eam-resume-right">
@@ -60,7 +77,10 @@ export default defineComponent({
   name: "ResumeForm",
   components: { Resume, VueElementLoading },
   props: {
-    section: String,
+    section: {
+      type: String,
+      required: true,
+    },
   },
   setup(props) {
     const name = ref("");
@@ -69,6 +89,7 @@ export default defineComponent({
     const email = ref("");
     const objectives = ref("");
     const skills = ref([""]);
+    const sections = ["basic", "objectives", "skills", "trainings"];
 
     const file = ref(null);
     const fileError = ref("");
@@ -162,9 +183,46 @@ export default defineComponent({
       router.push({ name: "Login" });
     }
 
-    const add = () => {
+    if (!sections.includes(props.section)) {
+      router.push({ name: "Format" });
+    }
+
+    const eamNext = () => {
+      if (props.section == "basic") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "objectives" },
+        });
+      } else if (props.section == "objectives") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "skills" },
+        });
+      }
+    };
+
+    const eamBack = () => {
+      if (props.section == "objectives") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "basic" },
+        });
+      } else if (props.section == "skills") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "objectives" },
+        });
+      }
+    };
+
+    const eamAdd = () => {
       skills.value.push("");
-      console.log(skills.value);
+    };
+
+    const eamRemove = () => {
+      if (skills.value.length > 1) {
+        skills.value.pop();
+      }
     };
 
     return {
@@ -178,7 +236,10 @@ export default defineComponent({
       fileError,
       eamUpload,
       eamSubmit,
-      add,
+      eamAdd,
+      eamRemove,
+      eamNext,
+      eamBack,
       userData: computed(() => store.state.userData),
     };
   },
@@ -191,7 +252,7 @@ input[type="file"] {
 }
 
 .eam-resume-container {
-  padding: 2em 0;
+  padding: 4em 0;
 }
 
 .eam-resume-left {
@@ -214,6 +275,8 @@ input[type="file"] {
   color: #fff;
   font-weight: bold;
   cursor: pointer;
+  min-width: 40%;
+  margin-bottom: 1em;
 }
 
 .eam-resume-left textarea {
@@ -227,5 +290,11 @@ input[type="file"] {
 
 .eam-resume-left button:hover {
   background-color: var(--eam-blue);
+}
+
+.eam-resume-action-buttons,
+.eam-resume-nav-buttons {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

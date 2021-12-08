@@ -89,7 +89,7 @@ export default defineComponent({
 
 <style scoped>
 .eam-login {
-  padding: 6em 0;
+  padding: 12em 0;
 }
 
 .eam-login .container {

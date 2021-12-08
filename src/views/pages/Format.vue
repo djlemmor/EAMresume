@@ -3,11 +3,15 @@
     <div class="container">
       <div class="eam-format-container">
         <h2>Choose Your Resume Format</h2>
-        <p class="eam-notify">*As of now we only have 1 resume format. More coming soon</p>
+        <p class="eam-notify">
+          *As of now we only have 1 resume format. More coming soon
+        </p>
         <div class="eam-resume-format">
           <div>
-            <router-link :to="{ name: 'ResumeForm', params: { section: 'basic' } }">
-              <img src="@/assets/resume.png" alt="resume photo">
+            <router-link
+              :to="{ name: 'ResumeForm', params: { section: 'basic' } }"
+            >
+              <img src="@/assets/resume.png" alt="resume photo" />
               <p>DEFAULT</p>
             </router-link>
           </div>
@@ -18,18 +22,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Format',
+  name: "Format",
   components: {},
 });
 </script>
 
 <style scoped>
-
 .eam-format-container {
-  padding: 3em 0;
+  padding-bottom: 22em;
 }
 .eam-format-container img {
   max-width: 200px;
@@ -40,21 +43,22 @@ export default defineComponent({
   padding: 1em 0;
 }
 
-.eam-resume-format div{
+.eam-resume-format div {
   padding: 1em;
   text-align: center;
   cursor: pointer;
-  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+    rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   transition: margin 0.5s;
 }
 
-.eam-resume-format div p{
+.eam-resume-format div p {
   color: var(--eam-gray);
   margin-top: 1em;
 }
 
-.eam-resume-format div:hover{
+.eam-resume-format div:hover {
   margin-top: -1em;
 }
-
 </style>

@@ -61,6 +61,10 @@ export default defineComponent({
 .container > * {
   margin-bottom: 1em;
 }
+
+.eam-dashboard {
+  padding-bottom: 31em;
+}
 .eam-button-logout {
   padding: 1em 1.5em;
   border: none;

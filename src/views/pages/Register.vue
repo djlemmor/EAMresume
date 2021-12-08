@@ -87,7 +87,7 @@ export default defineComponent({
 
 <style scoped>
 .eam-register {
-  padding: 6em 0;
+  padding: 8em 0;
 }
 .eam-register .container {
   flex-direction: column;

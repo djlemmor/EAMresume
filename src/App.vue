@@ -1,6 +1,5 @@
 <template>
   <Navbar />
-  {{ cookie }}
   <router-view />
   <Footer />
 </template>
@@ -15,11 +14,6 @@ export default defineComponent({
   components: {
     Navbar,
     Footer,
-  },
-  computed: {
-    cookie: function () {
-      return this.$cookie.getCookie("USER_UID");
-    },
   },
 });
 </script>
