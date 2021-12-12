@@ -39,7 +39,7 @@ export default defineComponent({
 
 <style scoped>
 .eam-home {
-  padding: 8.2em 0;
+  padding: 7em 0;
 }
 
 .eam-home .container {

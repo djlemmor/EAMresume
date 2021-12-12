@@ -1,19 +1,43 @@
 <template>
+  <vue-element-loading :active="checked" is-full-screen />
   <Navbar />
   <router-view />
   <Footer />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import Navbar from "@/views/layout/Navbar.vue";
 import Footer from "@/views/layout/Footer.vue";
+import { isLoggin } from "@/helpers/authHelper";
+import VueElementLoading from "vue-element-loading";
+import store from "@/store";
 
 export default defineComponent({
   name: "App",
   components: {
     Navbar,
     Footer,
+    VueElementLoading,
+  },
+  setup() {
+    const checked = ref(false);
+
+    if (isLoggin()) {
+      (async function () {
+        try {
+          checked.value = true;
+          await store.dispatch("getUserData");
+          checked.value = false;
+        } catch (err: any) {
+          checked.value = false;
+        }
+      })();
+    }
+
+    return {
+      checked,
+    };
   },
 });
 </script>
@@ -62,7 +86,7 @@ section {
 }
 
 .container {
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

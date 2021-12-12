@@ -5,6 +5,7 @@
       <div class="eam-resume-left eam-flex-col">
         <h2>RESUME FORM</h2>
         <form @submit.prevent="eamSubmit">
+          <!-- BASIC INFO -->
           <div v-if="section == 'basic'">
             <label>Upload your picture</label>
             <input type="file" @change="eamUpload" />
@@ -18,23 +19,89 @@
             <label>Email</label>
             <input v-model="email" type="email" required />
           </div>
+
+          <!-- OBJECTIVES -->
           <div v-else-if="section == 'objectives'">
             <label>Objectives</label>
             <textarea v-model="objectives" required></textarea>
           </div>
+
+          <!-- SKILLS -->
           <div v-else-if="section == 'skills'">
-            <label>Skills</label>
+            <label>Summary of Skills</label>
             <div v-for="(skill, index) in skills" :key="index">
               <input v-model="skills[index]" type="text" required />
             </div>
           </div>
+
+          <!-- TRAININGS -->
+          <div v-else-if="section == 'trainings'">
+            <label>Trainings and Seminars Attended</label>
+            <div v-for="(training, index) in trainings" :key="index">
+              <textarea v-model="trainings[index]" required></textarea>
+            </div>
+          </div>
+
+          <!-- EDUCATIONS -->
+          <div v-else-if="section == 'educations'">
+            <label>Educational Background</label>
+            <div v-for="(education, index) in educations" :key="index">
+              <textarea v-model="educations[index]" required></textarea>
+            </div>
+          </div>
+
+          <!-- PERSONALS -->
+          <div v-else-if="section == 'personals'">
+            <label>Personal Data</label>
+            <p>Date of Birth</p>
+            <input v-model="dateofBirth" type="text" required />
+            <p>Place of Birth</p>
+            <input v-model="placeofBirth" type="text" required />
+            <p>Civil Status</p>
+            <input v-model="civilStatus" type="text" required />
+            <p>Sex</p>
+            <input v-model="sex" type="text" required />
+            <p>Citizenship</p>
+            <input v-model="citizenship" type="text" required />
+            <p>Height</p>
+            <input v-model="height" type="text" required />
+            <p>Weight</p>
+            <input v-model="weight" type="text" required />
+            <p>Religion</p>
+            <input v-model="religion" type="text" required />
+            <p>Language Spoken</p>
+            <input v-model="languageSpoken" type="text" required />
+          </div>
+
+          <!-- SUBMIT -->
           <button type="submit" class="eam-resume-submit">SUBMIT</button>
-          <div class="eam-resume-action-buttons" v-show="section == 'skills'">
+
+          <!-- ADD -->
+          <div
+            class="eam-resume-action-buttons"
+            v-show="
+              section == 'skills' ||
+              section == 'trainings' ||
+              section == 'educations'
+            "
+          >
             <button @click="eamAdd" type="button">ADD</button>
-            <button @click="eamRemove" type="button" v-show="skills.length > 1">
+
+            <!-- REMOVE -->
+            <button
+              @click="eamRemove"
+              type="button"
+              v-show="
+                skills.length > 1 ||
+                trainings.length > 1 ||
+                educations.length > 1
+              "
+            >
               REMOVE
             </button>
           </div>
+
+          <!-- NAVIGATION BUTTONS -->
           <div class="eam-resume-nav-buttons">
             <button
               @click="eamBack"
@@ -51,6 +118,8 @@
         </form>
         <div class="error">{{ dataChecker }}</div>
       </div>
+
+      <!-- RESUME COMPONENT -->
       <div class="eam-resume-right">
         <Resume
           :name="name"
@@ -59,6 +128,17 @@
           :email="email"
           :objectives="objectives"
           :skills="skills"
+          :trainings="trainings"
+          :educations="educations"
+          :dateofBirth="dateofBirth"
+          :placeofBirth="placeofBirth"
+          :civilStatus="civilStatus"
+          :sex="sex"
+          :citizenship="citizenship"
+          :height="height"
+          :weight="weight"
+          :religion="religion"
+          :languageSpoken="languageSpoken"
         />
       </div>
     </div>
@@ -89,7 +169,26 @@ export default defineComponent({
     const email = ref("");
     const objectives = ref("");
     const skills = ref([""]);
-    const sections = ["basic", "objectives", "skills", "trainings"];
+    const trainings = ref([""]);
+    const educations = ref([""]);
+    const dateofBirth = ref("");
+    const placeofBirth = ref("");
+    const civilStatus = ref("");
+    const sex = ref("");
+    const citizenship = ref("");
+    const height = ref("");
+    const weight = ref("");
+    const religion = ref("");
+    const languageSpoken = ref("");
+    const sections = [
+      "basic",
+      "objectives",
+      "skills",
+      "trainings",
+      "educations",
+      "personals",
+      "experiences",
+    ];
 
     const file = ref(null);
     const fileError = ref("");
@@ -170,7 +269,60 @@ export default defineComponent({
           await store.dispatch("updateUserData", skillsData);
           router.push({
             name: "ResumeForm",
-            params: { section: "skills" },
+            params: { section: "trainings" },
+          });
+        } catch (err: any) {
+          console.log(err);
+          dataChecker.value = "Please Fill Out All The Fields";
+        }
+      } else if (props.section == "trainings") {
+        /* TRAININGS */
+        const trainingsData = {
+          trainings: trainings.value,
+        };
+        try {
+          await store.dispatch("updateUserData", trainingsData);
+          router.push({
+            name: "ResumeForm",
+            params: { section: "educations" },
+          });
+        } catch (err: any) {
+          console.log(err);
+          dataChecker.value = "Please Fill Out All The Fields";
+        }
+      } else if (props.section == "educations") {
+        /* EDUCATIONS */
+        const educationsData = {
+          educations: educations.value,
+        };
+        try {
+          await store.dispatch("updateUserData", educationsData);
+          router.push({
+            name: "ResumeForm",
+            params: { section: "personals" },
+          });
+        } catch (err: any) {
+          console.log(err);
+          dataChecker.value = "Please Fill Out All The Fields";
+        }
+      } else if (props.section == "personals") {
+        /* PERSONALS */
+        const personalsData = {
+          dateofBirth: dateofBirth.value,
+          placeofBirth: placeofBirth.value,
+          civilStatus: civilStatus.value,
+          sex: sex.value,
+          citizenship: citizenship.value,
+          height: height.value,
+          weight: weight.value,
+          religion: religion.value,
+          languageSpoken: languageSpoken.value,
+        };
+        try {
+          await store.dispatch("updateUserData", personalsData);
+          router.push({
+            name: "ResumeForm",
+            params: { section: "experiences" },
           });
         } catch (err: any) {
           console.log(err);
@@ -198,6 +350,26 @@ export default defineComponent({
           name: "ResumeForm",
           params: { section: "skills" },
         });
+      } else if (props.section == "skills") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "trainings" },
+        });
+      } else if (props.section == "trainings") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "educations" },
+        });
+      } else if (props.section == "educations") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "personals" },
+        });
+      }else if (props.section == "personals") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "experiences" },
+        });
       }
     };
 
@@ -212,16 +384,52 @@ export default defineComponent({
           name: "ResumeForm",
           params: { section: "objectives" },
         });
+      } else if (props.section == "trainings") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "skills" },
+        });
+      } else if (props.section == "educations") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "trainings" },
+        });
+      } else if (props.section == "personals") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "educations" },
+        });
+      }else if (props.section == "experiences") {
+        router.push({
+          name: "ResumeForm",
+          params: { section: "personals" },
+        });
       }
     };
 
     const eamAdd = () => {
-      skills.value.push("");
+      if (props.section == "skills") {
+        skills.value.push("");
+      } else if (props.section == "trainings") {
+        trainings.value.push("");
+      } else if (props.section == "educations") {
+        educations.value.push("");
+      }
     };
 
     const eamRemove = () => {
-      if (skills.value.length > 1) {
-        skills.value.pop();
+      if (props.section == "skills") {
+        if (skills.value.length > 1) {
+          skills.value.pop();
+        }
+      } else if (props.section == "trainings") {
+        if (trainings.value.length > 1) {
+          trainings.value.pop();
+        }
+      } else if (props.section == "educations") {
+        if (educations.value.length > 1) {
+          educations.value.pop();
+        }
       }
     };
 
@@ -232,6 +440,17 @@ export default defineComponent({
       mobile,
       objectives,
       skills,
+      trainings,
+      educations,
+      dateofBirth,
+      placeofBirth,
+      civilStatus,
+      sex,
+      citizenship,
+      height,
+      weight,
+      religion,
+      languageSpoken,
       dataChecker,
       fileError,
       eamUpload,
@@ -275,13 +494,13 @@ input[type="file"] {
   color: #fff;
   font-weight: bold;
   cursor: pointer;
-  min-width: 40%;
+  min-width: 30%;
   margin-bottom: 1em;
 }
 
 .eam-resume-left textarea {
-  height: 160px;
-  max-height: 160px;
+  height: 100px;
+  max-height: 100px;
 }
 
 .eam-resume-right {

@@ -1,128 +1,180 @@
 <template>
-  <section class="eam-register">
-    <div class="container">
-      <div class="eam-register-container">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="80"
-          height="80"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#fff"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3" />
-          <circle cx="12" cy="10" r="3" />
-          <circle cx="12" cy="12" r="10" />
-        </svg>
-        <form @submit.prevent="eamRegister">
-          <label>Display Name</label>
-          <input v-model="displayName" type="text" required />
-          <label>Email</label>
-          <input v-model="email" type="email" required />
-          <label>Password</label>
-          <input v-model="password" type="password" required />
-          <button :disabled="disable">Register</button>
-        </form>
+  <div class="eam-resume">
+    <!-- BASIC INFO -->
+    <div class="eam-resume-basic">
+      <!-- NAME -->
+      <p class="eam-resume-name" v-if="name">
+        <b> {{ name }} </b>
+      </p>
+      <p class="eam-resume-name" v-else-if="userData.name">
+        <b> {{ userData.name }} </b>
+      </p>
+      <p class="eam-resume-name" v-else><b> NAME </b></p>
+
+      <!-- ADDRESS -->
+      <p class="eam-resume-address" v-if="address">Address: {{ address }}</p>
+      <p class="eam-resume-address" v-else>Address: {{ userData.address }}</p>
+
+      <!-- PROFILE PICTURE -->
+      <div class="eam-resume-profile-picture" v-if="userData.photoURL">
+        <img :src="userData.photoURL" alt="profile picture" />
       </div>
-      <div class="error">{{ error }}</div>
+      <div class="eam-resume-profile-tempo" v-else>Profile Here</div>
+
+      <!-- MOBILE NUMBER -->
+      <p class="eam-resume-mobile" v-if="mobile">Mobile Number: {{ mobile }}</p>
+      <p class="eam-resume-mobile" v-else>
+        Mobile Number: {{ userData.mobile }}
+      </p>
+
+      <!-- EMAIL -->
+      <p class="eam-resume-email" v-if="email">Email: {{ email }}</p>
+      <p class="eam-resume-email" v-else>Email: {{ userData.email }}</p>
     </div>
-  </section>
+
+    <!-- OBJECTIVES -->
+    <div class="eam-resume-objectives">
+      <p><b>OBJECTIVES:</b></p>
+      <p v-if="objectives">{{ objectives }}</p>
+      <p v-else>{{ userData.objectives }}</p>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="eam-resume-skills">
+      <p><b>SUMMARY OF SKILLS:</b></p>
+      <div v-if="skills[0]">
+        <ul>
+          <li v-for="(skill, index) in skills" :key="index">
+            <p>{{ skill }}</p>
+          </li>
+        </ul>
+      </div>
+      <div v-else-if="userData.skills">
+        <ul>
+          <li v-for="skill in userData.skills" :key="skill">
+            <p>{{ skill }}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TRAININGS -->
+    <div class="eam-resume-trainings">
+      <p><b>TRAININGS AND SEMINARS ATTENDED:</b></p>
+      <div v-if="trainings[0]">
+        <p v-for="(training, index) in trainings" :key="index">
+          {{ training }}
+        </p>
+      </div>
+      <div v-else-if="userData.trainings">
+        <p v-for="training in userData.trainings" :key="training">
+          {{ training }}
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import store from "@/store";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Register",
+  name: "Resume",
   components: {},
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    mobile: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    objectives: {
+      type: String,
+      required: true,
+    },
+    skills: {
+      type: Array,
+      required: true,
+    },
+    trainings: {
+      type: Array,
+      required: true,
+    },
+  },
   setup() {
-    const displayName = ref("");
-    const email = ref("");
-    const password = ref("");
-    const disable = ref(false);
-    const error = ref("");
-
-    const eamRegister = async () => {
-      disable.value = true;
-      try {
-        await store.dispatch("signup", {
-          email: email.value,
-          password: password.value,
-          displayName: displayName.value,
-        });
-        console.log("succcess");
-        disable.value = false;
-      } catch (err: any) {
-        if (err.code == "auth/email-already-in-use") {
-          error.value = "The Email is Already in Use";
-        } else if (err.code == "auth/weak-password") {
-          error.value = "Password Should be at least 6 Characters";
-        } else {
-          error.value = err.code;
-          console.log(err);
-        }
-        disable.value = false;
-      }
+    return {
+      userData: computed(() => store.state.userData),
     };
-
-    return { displayName, email, password, disable, error, eamRegister };
   },
 });
 </script>
 
 <style scoped>
-.eam-register {
-  padding: 6em 0;
-}
-.eam-register .container {
-  flex-direction: column;
-}
-.eam-register-container {
-  margin: 0 10em;
-  padding: 2em;
-  background-color: var(--eam-blue-gray);
-  color: #fff;
-  text-align: center;
-}
-
-.eam-register-container svg {
-  margin-top: -5em;
-  background-color: #647c90;
-  border-radius: 50%;
-}
-
-.eam-register-container form {
-  text-align: left;
-}
-
-.eam-register-container input {
-  width: 100%;
-  padding: 1em;
-  margin: 1em 0;
-}
-
-.eam-register-container label {
-  font-size: 1.2rem;
-}
-
-.eam-register-container h2 {
-  font-size: 2rem;
-}
-
-.eam-register-container button {
-  font-size: 1.2rem;
-  padding: 0.8em 2em;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1em;
-}
-
-.eam-register-container button:hover {
+.eam-resume {
+  border: 1px solid var(--eam-gray);
   background-color: #fff;
+  height: 100%;
+  padding: 0;
+  position: relative;
+  word-wrap: break-word;
+  min-height: 600px;
+}
+
+.eam-resume p {
+  margin-bottom: 0.5em;
+}
+
+.eam-resume-basic {
+  padding: 1em;
+}
+
+.eam-resume-objectives,
+.eam-resume-skills,
+.eam-resume-trainings {
+  padding: 0 1em 1em 1em;
+}
+.eam-resume-name {
+  text-transform: uppercase;
+}
+
+.eam-resume-profile-tempo {
+  text-align: right;
+  border: 1px dashed var(--eam-cool-gray);
+  padding: 3em 1em;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+.eam-resume-profile-picture {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  max-width: 6em;
+}
+
+.eam-resume-objectives p {
+  max-width: 30em;
+  line-height: 32px;
+}
+
+.eam-resume-skills ul {
+  list-style-type: disc;
+  padding-left: 1em;
+}
+
+.eam-resume-trainings p {
+  white-space: pre-line;
 }
 </style>

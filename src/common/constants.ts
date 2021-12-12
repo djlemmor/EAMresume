@@ -7,6 +7,17 @@ const USER = {
   photoURL: '',
   objectives: '',
   skills: [],
+  trainings: [],
+  educations: [],
+  dateofBirth: '',
+  placeofBirth: '',
+  civilStatus: '',
+  sex: '',
+  citizenship: '',
+  height: '',
+  weight: '',
+  religion: '',
+  languageSpoken: '',
   status: 'notlogin',
 };
 

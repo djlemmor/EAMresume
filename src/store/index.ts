@@ -51,7 +51,6 @@ export default createStore({
       try {
         saveUserUID(res.user.uid)
         await dispatch('getUserData')
-        console.log("User", res.user)
       } catch (error) {
         console.log("Signin Error", error)
       }
@@ -108,6 +107,7 @@ export default createStore({
         console.log("Upload Image Error", error)
       }
     },
+
   },
   modules: {
   },
